@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【MyBatis】1_简介 - </title><meta name="Description" content=""><meta property="og:title" content="【MyBatis】1_简介" />
+<meta property="og:description" content="MyBatis 框架 1 简介 1.1 概念 ORM（Object/Relational Mapping），即对象关系映射，实现面向对象的编程语言到关系数据库的映射 ORM 工具" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/mybatis1_%E7%AE%80%E4%BB%8B/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-06-02T20:12:03+08:00" />
+<meta property="article:modified_time" content="2020-06-02T20:12:03+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【MyBatis】1_简介"/>
+<meta name="twitter:description" content="MyBatis 框架 1 简介 1.1 概念 ORM（Object/Relational Mapping），即对象关系映射，实现面向对象的编程语言到关系数据库的映射 ORM 工具"/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/mybatis1_%E7%AE%80%E4%BB%8B/" /><link rel="next" href="http://example.org/posts/mybatis2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【MyBatis】1_简介",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/mybatis1_%E7%AE%80%E4%BB%8B\/"
+        },"genre": "posts","keywords": "","wordcount":  1127 ,
+        "url": "http:\/\/example.org\/posts\/mybatis1_%E7%AE%80%E4%BB%8B\/","datePublished": "2020-06-02T20:12:03+08:00","dateModified": "2020-06-02T20:12:03+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【MyBatis】1_简介</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-02">2020-06-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1127 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-简介">1 简介</a>
+      <ul>
+        <li><a href="#11-概念">1.1 概念</a></li>
+        <li><a href="#12-功能架构">1.2 功能架构</a></li>
+        <li><a href="#13-框架架构">1.3 框架架构</a></li>
+        <li><a href="#14-其他">1.4 其他</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="mybatis-框架">MyBatis 框架</h1>
+<h2 id="1-简介">1 简介</h2>
+<h3 id="11-概念">1.1 概念</h3>
+<ul>
+<li>
+<p><strong>ORM（Object/Relational Mapping）</strong>，即对象关系映射，实现面向对象的编程语言到关系数据库的映射</p>
+</li>
+<li>
+<p><strong>ORM 工具的唯一作用</strong>：把持久化对象的保存、修改、删除等操作，转换为对数据库的操作</p>
+</li>
+<li>
+<p><strong>ORM 基本映射关系</strong></p>
+<ul>
+<li>数据表——类</li>
+<li>数据表的行——对象（实例）</li>
+<li>数据表的列（字段）——对象的属性</li>
+</ul>
+</li>
+<li>
+<p><strong>MyBatis 的主要思想</strong>：将程序中的大量 SQL 语句抽取出来，配置在配置文件中，以实现 SQL 的灵活配置</p>
+</li>
+<li>
+<p>MyBatis 可以对配置和原生 Map 使用简单的 XML 或注解，将接口和 Java 的 POJO 类映射成数据库中的记录</p>
+</li>
+<li>
+<p>MyBatis 并不完全是一种 ORM 框架，它的设计思想和 ORM 相似，只是它允许直接编写 SQL 语句，使得数据库访问更加灵活；准确地说，MyBatis 提供了一种“半自动化”的 ORM 实现，是一种 &ldquo;SQL Mapping&rdquo; 框架</p>
+</li>
+</ul>
+<h3 id="12-功能架构">1.2 功能架构</h3>
+<ul>
+<li><strong>API 接口层</strong>
+<ul>
+<li>提供给外部使用的接口 API，<strong>接口层</strong>接收到调用请求会调用<strong>数据处理层</strong>来完成具体的数据处理</li>
+<li>数据查询接口/数据新增接口/数据更新接口/数据删除接口/获取配置接口</li>
+</ul>
+</li>
+<li><strong>数据处理层</strong>
+<ul>
+<li>负责具体的 SQL 查找、解析、执行以及执行结果映射处理，实现根据调用请求完成一次数据库操作</li>
+<li><strong>参数映射</strong>：参数映射配置/参数映射解析/参数类型解析</li>
+<li><strong>SQL解析</strong>：SQL 获取/SQL 解析/动态 SQL</li>
+<li><strong>SQL执行</strong>：SimpleExecutor/BatchExecutor/ReuseExecutor</li>
+<li><strong>结果映射</strong>：结果映射配置/结果类型转换/结果数据拷贝</li>
+</ul>
+</li>
+<li><strong>基础支撑层</strong>
+<ul>
+<li>负责最基本的功能支撑</li>
+<li>连接管理/事务管理/配置加载/缓存处理</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-框架架构">1.3 框架架构</h3>
+<ul>
+<li><strong>加载配置</strong>
+<ul>
+<li>MyBatis 应用程序根据 XML 配置文件加载运行环境，创建 SqlSessionFactory ，将 SQL 的配置信息加载成为一个个 MappedStatement 对象，包括传入参数映射配置、执行的 SQL 语句、结果映射配置，存储在内存中</li>
+</ul>
+</li>
+<li><strong>SQL 解析</strong>
+<ul>
+<li>当接口层接收到调用请求时，会接收到传入 SQL 的 ID 和传入对象（Map/JavaBean/基本数据类型），MyBaits 根据 SQL 的 ID 找到对应的 MappedStatement，再根据传入的参数对象对 MappendStatement进行解析，解析后得到最终要执行的 SQL 语句和参数</li>
+</ul>
+</li>
+<li><strong>SQL 执行</strong>
+<ul>
+<li>SqlSession 将最终得到的 SQL 和参数拿到数据库进行执行，得到操作数据库的结果</li>
+</ul>
+</li>
+<li><strong>结果映射</strong>
+<ul>
+<li>将操作数据库的结果按照映射的配置进行转换，转换为 HashMap/JavaBean/基本数据类型，返回结果后关闭 SqlSession</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-其他">1.4 其他</h3>
+<ul>
+<li>
+<p><strong>优点</strong></p>
+<ul>
+<li>简单小巧易于上手，方便浏览修改 SQL 语句</li>
+<li>解除 SQL 与程序代码的耦合</li>
+<li>提供映射标签，支持对象与数据库 ORM 字段关系映射</li>
+<li>提供 xml 标签，支持编写动态 SQL</li>
+</ul>
+</li>
+<li>
+<p><strong>与 JDBC、Hibernate 的区别</strong></p>
+<ul>
+<li>MyBatis 在 JDBC 的基础上做了，OO化、封装事务管理接口等，依然要通过 JDBC 完成数据查询、更新等操作</li>
+<li>MyBatis 与 Hibernate 都屏蔽了 JDBC API 的底层访问细节</li>
+<li>Hibernate 是全自动的 ORM 映射工具，可以自动生成 SQL 语句；MyBatis需要在 xml 配置文件中写 SQL 语句</li>
+<li>由于 Hibernate 可以自动生成 SQL 语句，在进行复杂查询时，Hibernate 实现要比 MyBatis 复杂</li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-02</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=""></a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/posts/mybatis2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" class="next" rel="next" title="【MyBatis】2_入门程序">【MyBatis】2_入门程序<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
