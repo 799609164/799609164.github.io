@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【MyBatis】4_映射文件 - </title><meta name="Description" content=""><meta property="og:title" content="【MyBatis】4_映射文件" />
+<meta property="og:description" content="MyBatis 框架 4 映射文件 MyBatis 中文文档——Mapper XML 文件 4.1 回顾 映射文件是放置 SQL 语句的地方，写好 SQL 语句映射文件后，在配置文件的 mappers 标签中引用，使得程序省" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-06-05T19:34:38+08:00" />
+<meta property="article:modified_time" content="2020-06-05T19:34:38+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【MyBatis】4_映射文件"/>
+<meta name="twitter:description" content="MyBatis 框架 4 映射文件 MyBatis 中文文档——Mapper XML 文件 4.1 回顾 映射文件是放置 SQL 语句的地方，写好 SQL 语句映射文件后，在配置文件的 mappers 标签中引用，使得程序省"/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6/" /><link rel="prev" href="http://example.org/posts/mybatis3_%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" /><link rel="next" href="http://example.org/posts/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【MyBatis】4_映射文件",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6\/"
+        },"genre": "posts","keywords": "Java, MyBatis","wordcount":  3138 ,
+        "url": "http:\/\/example.org\/posts\/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6\/","datePublished": "2020-06-05T19:34:38+08:00","dateModified": "2020-06-05T19:34:38+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【MyBatis】4_映射文件</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-05">2020-06-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3138 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#4-映射文件">4 映射文件</a>
+      <ul>
+        <li><a href="#41-回顾">4.1 回顾</a></li>
+        <li><a href="#42-映射文件顶级元素">4.2 映射文件顶级元素</a></li>
+        <li><a href="#43-resultmap">4.3 resultMap</a></li>
+        <li><a href="#44-select">4.4 select</a></li>
+        <li><a href="#45-insertupdate-和-delete">4.5 insert、update 和 delete</a></li>
+        <li><a href="#46-sql">4.6 sql</a></li>
+        <li><a href="#47-parameters">4.7 parameters</a></li>
+        <li><a href="#48-cache">4.8 cache</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="mybatis-框架">MyBatis 框架</h1>
+<h2 id="4-映射文件">4 映射文件</h2>
+<p><a href="http://www.mybatis.org/mybatis-3/zh/sqlmap-xml.html" target="_blank" rel="noopener noreffer">MyBatis 中文文档——Mapper XML 文件</a></p>
+<h3 id="41-回顾">4.1 回顾</h3>
+<ul>
+<li>
+<p>映射文件是放置 SQL 语句的地方，写好 SQL 语句映射文件后，在配置文件的 mappers 标签中引用，使得程序省掉了大部分 JDBC代码，</p>
+</li>
+<li>
+<p><strong>UserMapper.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE mapper PUBLIC &#34;-//mybatis.org/DTD Mapper 3.0&#34; &#34;http://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;&gt;</span>
+<span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">&#34;com.xxx.mybatis.mapper.UserMapper&#34;</span><span class="nt">&gt;</span>
+      
+    <span class="c">&lt;!-- 自定义返回结果集 --&gt;</span>
+    <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&#34;userMap&#34;</span> <span class="na">type=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;id</span> <span class="na">property=</span><span class="s">&#34;id&#34;</span> <span class="na">column=</span><span class="s">&#34;id&#34;</span> <span class="na">javaType=</span><span class="s">&#34;int&#34;</span><span class="nt">&gt;&lt;/id&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;username&#34;</span> <span class="na">column=</span><span class="s">&#34;username&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">&gt;&lt;/result&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;password&#34;</span> <span class="na">column=</span><span class="s">&#34;password&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">&gt;&lt;/result&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;sex&#34;</span> <span class="na">column=</span><span class="s">&#34;sex&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">&gt;&lt;/result&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;address&#34;</span> <span class="na">column=</span><span class="s">&#34;address&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">&gt;&lt;/result&gt;</span>
+    <span class="nt">&lt;/resultMap&gt;</span>
+  
+    <span class="c">&lt;!-- 定义 SQL 语句，其中 id 需要和接口中的方法名一致 --&gt;</span>
+    <span class="c">&lt;!-- useGeneratedKeys：实现自动生成主键 --&gt;</span>
+    <span class="c">&lt;!-- keyProperty： 唯一标记一个属性 --&gt;</span>
+    <span class="c">&lt;!-- parameterType 指明查询时使用的参数类型，resultType 指明查询返回的结果集类型 --&gt;</span>
+    <span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">&#34;insertUser&#34;</span> <span class="na">useGeneratedKeys=</span><span class="s">&#34;true&#34;</span> <span class="na">keyProperty=</span><span class="s">&#34;id&#34;</span><span class="nt">&gt;</span>
+        insert into user (username,password,sex,address) values
+        (#{username},#{password},#{sex},#{address})
+    <span class="nt">&lt;/insert&gt;</span>
+  
+    <span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">&#34;updateUser&#34;</span>  <span class="na">parameterType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+        update user set
+        address=#{address} where
+        id=#{id}
+    <span class="nt">&lt;/update&gt;</span>
+  
+    <span class="nt">&lt;delete</span> <span class="na">id=</span><span class="s">&#34;deleteUser&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span><span class="nt">&gt;</span>
+        delete from user where
+        id=#{id}
+    <span class="nt">&lt;/delete&gt;</span>
+  
+    <span class="c">&lt;!-- 如未为 Java Bean 起类别名，resultType=&#34;com.xxx.mybatis.model.User&#34; --&gt;</span>
+    <span class="c">&lt;!-- 使用 resultType 时，一定要保证，你属性名与字段名相同；如果不相同，就使用 resultMap --&gt;</span>
+    <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUserById&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+        select * from user where id=#{id}
+    <span class="nt">&lt;/select&gt;</span>
+  
+    <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectAllUser&#34;</span> <span class="na">resultMap=</span><span class="s">&#34;userMap&#34;</span><span class="nt">&gt;</span>
+        select * from user
+    <span class="nt">&lt;/select&gt;</span>
+  
+<span class="nt">&lt;/mapper&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="42-映射文件顶级元素">4.2 映射文件顶级元素</h3>
+<ul>
+<li><strong>cache</strong>：给定命名空间的缓存配置</li>
+<li><strong>cache-ref</strong>：其他命名空间缓存配置的引用</li>
+<li><strong>resultMap</strong>：描述如何从数据库结果集中来加载对象</li>
+<li><strong>sql</strong>：可被其他语句引用的可重用语句块</li>
+<li><strong>insert</strong>：映射插入语句</li>
+<li><strong>update</strong>：映射更新语句</li>
+<li><strong>delete</strong>：映射删除语句</li>
+<li><strong>select</strong>：映射查询语句</li>
+</ul>
+<h3 id="43-resultmap">4.3 resultMap</h3>
+<h4 id="431-元素及属性">4.3.1 元素及属性</h4>
+<ul>
+<li>
+<p><strong>resultMap 子元素</strong></p>
+<ul>
+<li><strong>constructor</strong>：用来将结果注入到一个实例化好的类的构造方法中</li>
+<li><strong>idArg</strong>： ID 参数，标记结果作为 ID</li>
+<li><strong>arg</strong>：注入到构造方法的一个普通结果</li>
+<li><strong>id</strong>： 一个 ID 结果，标记结果作为 ID</li>
+<li><strong>result</strong>：注入到字段或 JavaBean 属性的普通结果</li>
+<li><strong>association</strong>：复杂的类型关联，多个结果合成的类型</li>
+<li><strong>嵌入结果映射</strong>：结果映射自身的关联，也可以引用一个外部结果映射</li>
+<li><strong>collection</strong>：复杂类型的集，也可以引用一个外部结果映射</li>
+<li><strong>discriminator</strong>：使用结果值来决定使用哪个结果集</li>
+<li><strong>case</strong>：基本一些值的结果映射，也可以引用一个外部结果映射</li>
+</ul>
+</li>
+<li>
+<p><strong>resultMap 属性</strong></p>
+<ul>
+<li><strong>id</strong> : 当前命名空间中的一个唯一标识，用于标识一个 resultMap</li>
+<li><strong>type</strong>：类的全限定名，或者一个类型别名</li>
+<li><strong>autoMapping</strong>：为这个 ResultMap 开启或者关闭自动映射，该属性会覆盖全局的属性 autoMappingBehavior，默认值为：unset</li>
+</ul>
+</li>
+<li>
+<p><strong>id &amp; reslut</strong></p>
+<ul>
+<li>id 和 result 都是映射一个单独列的值到简单数据类型（数值型、字符串和日期等）的单独属性或字段 ；唯一不同的是 id 为<strong>主键映射</strong>，而 result 为<strong>其他数据库表字段到 JavaBean 属性的映射</strong></li>
+<li><strong>property</strong>：映射到 JavaBean 的属性</li>
+<li><strong>column</strong>：数据库的列名或列名的重命名标签</li>
+<li><strong>javaType</strong>：一个 Java 类的完全限定名，或一个类型别名</li>
+<li><strong>jdbcType</strong>：所支持的 JDBC 类型，其仅作用在对插入、更新和删除操作允许为空的列</li>
+</ul>
+</li>
+<li>
+<p><strong>constructor</strong></p>
+<ul>
+<li>除了用 id &amp; result 将 JavaBean 属性映射到数据库字段外，还可以用构造方法实现映射</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 为 JavaBean User 类添加有参的构造方法
+</span><span class="c1"></span><span class="kd">public</span> <span class="nf">User</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">,</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span><span class="n">String</span> <span class="n">password</span><span class="o">,</span><span class="n">String</span> <span class="n">sex</span><span class="o">,</span><span class="n">String</span> <span class="n">address</span><span class="o">){</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">sex</span> <span class="o">=</span> <span class="n">sex</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 对应的 resultMap --&gt;</span>
+<span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&#34;userMap&#34;</span> <span class="na">type=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor&gt;</span>
+        <span class="nt">&lt;idArg</span> <span class="na">column=</span><span class="s">&#34;id&#34;</span> <span class="na">javaType=</span><span class="s">&#34;int&#34;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">column=</span><span class="s">&#34;username&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">column=</span><span class="s">&#34;password&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">column=</span><span class="s">&#34;sex&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">column=</span><span class="s">&#34;address&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/constructor&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>discriminator</strong></p>
+<ul>
+<li>用于处理一个单独的数据库查询返回很多不同 （但是希望有些关联） 数据类型的结果集；类似于 Java 语言中的 switch 语句</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 当 sex 为 male ，才映射 sex 的属性 --&gt;</span>
+<span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&#34;userMap&#34;</span> <span class="na">type=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;id</span> <span class="na">property=</span><span class="s">&#34;id&#34;</span> <span class="na">column=</span><span class="s">&#34;id&#34;</span> <span class="na">javaType=</span><span class="s">&#34;int&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;username&#34;</span> <span class="na">column=</span><span class="s">&#34;username&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;password&#34;</span> <span class="na">column=</span><span class="s">&#34;password&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;discriminator</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span> <span class="na">column=</span><span class="s">&#34;sex&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;case</span> <span class="na">value=</span><span class="s">&#34;male&#34;</span> <span class="na">resultType=</span><span class="s">&#34;sexResult&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;sex&#34;</span> <span class="na">column=</span><span class="s">&#34;sex&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/case&gt;</span>
+     <span class="nt">&lt;/discriminator&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;address&#34;</span> <span class="na">column=</span><span class="s">&#34;address&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h4 id="432-使用示例">4.3.2 使用示例</h4>
+<ul>
+<li>
+<p><strong>UserMapper.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- MyBatis 会在幕后自动创建一个 resultMap，基于属性名来映射列到 JavaBean 的属性上 --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUserById&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user where id=#{id}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>自定义结果集</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&#34;userMap&#34;</span> <span class="na">type=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;id</span> <span class="na">property=</span><span class="s">&#34;id&#34;</span> <span class="na">column=</span><span class="s">&#34;id&#34;</span> <span class="na">javaType=</span><span class="s">&#34;int&#34;</span><span class="nt">&gt;&lt;/id&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;username&#34;</span> <span class="na">column=</span><span class="s">&#34;username&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">&gt;&lt;/result&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;password&#34;</span> <span class="na">column=</span><span class="s">&#34;password&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">&gt;&lt;/result&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;sex&#34;</span> <span class="na">column=</span><span class="s">&#34;sex&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">&gt;&lt;/result&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;address&#34;</span> <span class="na">column=</span><span class="s">&#34;address&#34;</span> <span class="na">javaType=</span><span class="s">&#34;String&#34;</span><span class="nt">&gt;&lt;/result&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 将结果集映射为自定义的 userMap --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectAllUser&#34;</span> <span class="na">resultMap=</span><span class="s">&#34;userMap&#34;</span><span class="nt">&gt;</span>
+    select * from user
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>列名不匹配时</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&#34;userMap&#34;</span> <span class="na">type=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;id</span> <span class="na">property=</span><span class="s">&#34;id&#34;</span> <span class="na">column=</span><span class="s">&#34;user_id&#34;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;username&#34;</span> <span class="na">column=</span><span class="s">&#34;user_name&#34;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;password&#34;</span> <span class="na">column=</span><span class="s">&#34;user_password&#34;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;sex&#34;</span> <span class="na">column=</span><span class="s">&#34;user_sex&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;address&#34;</span> <span class="na">column=</span><span class="s">&#34;user_address&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUsers&#34;</span> <span class="na">resultMap=</span><span class="s">&#34;userMap&#34;</span><span class="nt">&gt;</span>
+  select user_id, user_name, user_password, user_sex, user_address
+  from user
+  where id = #{id}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="44-select">4.4 select</h3>
+<ul>
+<li>
+<p><strong>UserMapper.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- selectUserById 方法，有一个 int（即 Integer） 型参数，返回一个 User 类型对象 --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUserById&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user where id=#{id}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 对应的 JDBC 语句
+</span><span class="c1"></span><span class="n">String</span> <span class="n">selectUserById</span> <span class="o">=</span> <span class="s">&#34;select * from user where id=?&#34;</span><span class="o">;</span>
+<span class="n">PreparedStatement</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">selectUserById</span><span class="o">);</span>
+<span class="n">ps</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="n">1</span><span class="o">,</span><span class="n">id</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>select 属性</strong></p>
+<ul>
+<li><strong>id</strong>：命名空间中唯一的标识符，可被其他语句引用</li>
+<li><strong>parameterType</strong>：传入该语句的参数的完全限定名或别名</li>
+<li><strong>resultType</strong>： 该语句返回类型的完全限定名或别名；如果是集合情形，则是集合可以包含的类型，而不能是集合本身</li>
+<li><strong>resultMap</strong>：外部 resultMap 的命名引用</li>
+<li>&hellip;</li>
+<li><strong>注</strong>：返回时可以使用 resultType 或 resultMap，但不能同时使用</li>
+</ul>
+</li>
+</ul>
+<h3 id="45-insertupdate-和-delete">4.5 insert、update 和 delete</h3>
+<ul>
+<li>
+<p><strong>insert</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 使用 useGeneratedKeys 实现自动生成主键，再把 keyProperty 设成对应的列 --&gt;</span>
+<span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">&#34;insertUser&#34;</span> <span class="na">useGeneratedKeys=</span><span class="s">&#34;true&#34;</span> <span class="na">keyProperty=</span><span class="s">&#34;id&#34;</span><span class="nt">&gt;</span>
+    insert into user (username,password,sex,address) values (#{username},#{password},#{sex},#{address})
+<span class="nt">&lt;/insert&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>update</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-XML" data-lang="XML"><span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">&#34;updateUser&#34;</span>  <span class="na">parameterType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    update user set
+    address=#{address}
+    where id=#{id}
+<span class="nt">&lt;/update&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>delete</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;delete</span> <span class="na">id=</span><span class="s">&#34;deleteUser&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span><span class="nt">&gt;</span>
+    delete from user where id=#{id}
+<span class="nt">&lt;/delete&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>selectKey</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 对于不支持自增长 id 的 JDBC 驱动来说， MyBatis 采用 selectKey 生成主键 --&gt;</span>
+<span class="c">&lt;!-- 在插入时使用 --&gt;</span>
+<span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">&#34;insertUser&#34;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- 使用 select seq_users.nextval from dual 生成一个 key --&gt;</span>
+    <span class="nt">&lt;selectKey</span> <span class="na">keyProperty=</span><span class="s">&#34;id&#34;</span> <span class="na">resultType=</span><span class="s">&#34;int&#34;</span> <span class="na">order=</span><span class="s">&#34;BEFORE&#34;</span><span class="nt">&gt;</span>
+         select seq_users.nextval from dual
+    <span class="nt">&lt;/selectKey&gt;</span>
+    insert into user (username,password,sex,address) values (#{username},#{password},#{sex},#{address})
+<span class="nt">&lt;/insert&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>keyProperty</strong>：selectKey 语句结果应该被设置的目标属性</li>
+<li><strong>keyColumn</strong>： 匹配属性的返回结果集中的列名称</li>
+<li><strong>resultType</strong>： 结果的类型，MyBatis 允许任何简单类型（包括字符串）作为主键的类型</li>
+<li><strong>order</strong>：可设置为 BEFORE 或 AFTER；
+<ul>
+<li>设置为 BEFORE，那么它会首先选择主键，设置 keyProperty 然后执行 insert 语句</li>
+<li>设置为 AFTER，那么先执行 insert 语句，然后是 selectKey</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>insert 、update 和 delete 的属性</strong></p>
+<ul>
+<li><strong>id</strong>：命名空间中唯一的标识符，可被其他语句引用</li>
+<li><strong>parameterType</strong>：传入该语句的参数的完全限定名或别名</li>
+<li><strong>useGeneratedKeys</strong>：（仅对 insert 和 update 有用）令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（像 MySQL 和 SQL Server 这样的关系数据库管理系统的自动递增字段；Oracle不支持自增长 id，设置为 true 会报错），默认为 false</li>
+<li><strong>keyProperty</strong>：（仅对 insert 和 update 有用）唯一标记一个属性，MyBatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值，默认为 unset</li>
+<li><strong>keyColumn</strong>：（仅对 insert 和 update 有用）通过生成的键值设置表中的列名，这个设置仅在某些数据库（像 PostgreSQL）是必须的，当主键列不是表中的第一列的时候需要设置</li>
+<li>&hellip;</li>
+</ul>
+</li>
+</ul>
+<h3 id="46-sql">4.6 sql</h3>
+<ul>
+<li>
+<p><strong>定义可复用的 SQL 代码段</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;sql</span> <span class="na">id=</span><span class="s">&#34;selectAllUser&#34;</span><span class="nt">&gt;</span>
+    select * from user
+<span class="nt">&lt;/sql&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 复用 SQL 代码段 --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUserById&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;include</span> <span class="na">refid=</span><span class="s">&#34;selectAllUser&#34;</span><span class="nt">/&gt;</span>
+      where id=#{id}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="47-parameters">4.7 parameters</h3>
+<ul>
+<li>
+<p><strong>基本数据类型参数</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUserById&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user where id=#{id}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Java 实体类型参数</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;insertOneUser&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;User&#34;</span> <span class="nt">&gt;</span>
+    insert into user (id,username,password,sex,address) values
+    (#{id},#{username},#{password},#{sex},#{address})
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Map 参数</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUserByNameAndSex&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;map&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user where name=#{name} and sex=#{sex}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>字符串替换</strong></p>
+<ul>
+<li>默认情况下，使用 <code>#{}</code> 格式的语法会使 MyBatis 创建预处理语句属性并安全地设置值（比如？），这样做更安全，更迅速</li>
+<li>如果想直接在 SQL 语句中插入一个不改变的字符串，比如 ORDER BY，可以使用： <code>ORDER BY ${columnName}</code>，MyBatis 不会修改或转义该字符串</li>
+<li><strong>注</strong>： 以上述方法接受用户的输入数据是不安全的，容易造成 SQL 注入攻击；因此，要么不允许用户输入，要么自行转义并检验</li>
+</ul>
+</li>
+</ul>
+<h3 id="48-cache">4.8 cache</h3>
+<ul>
+<li>
+<p>提高性能，且能解决全局依赖，默认未开启</p>
+</li>
+<li>
+<p><strong>开启二级缓存</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 创建一个 FIFO 缓存让其 60s 清空一次，存储 512 个对象或列表引用，返回的结果只读，
+</span><span class="c">  因此在不同线程中的调用者之间修改它们会导致引用冲突 --&gt;</span>
+<span class="nt">&lt;cache</span> <span class="na">eviction=</span><span class="s">&#34;FIFO&#34;</span> <span class="na">flushInterval=</span><span class="s">&#34;60000&#34;</span> <span class="na">size=</span><span class="s">&#34;512&#34;</span> <span class="na">readOnly=</span><span class="s">&#34;true&#34;</span><span class="nt">/&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 不同的命名空间里共享同一个缓存配置或者实例
+</span><span class="c">      这种情况下，可以使用 cache-ref 来引用另外一个缓存 --&gt;</span>
+<span class="nt">&lt;cache-ref</span> <span class="na">namespace=</span><span class="s">&#34;com.xxx.mybatis.mapper.UserMapper&#34;</span><span class="nt">/&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>cache 效果</strong></p>
+<ul>
+<li>映射文件中的所有 select 语句将会被缓存</li>
+<li>映射文件中的所有 insert,update 和 delete 语句会刷新缓存</li>
+<li>缓存会使用 Least Recently Used(LRU) 算法来收回</li>
+<li>缓存不会被设定的时间所清空</li>
+<li>缓存会存储列表集合或对象（无论查询方法返回什么）的 1024 个引用</li>
+<li>缓存会被视为是 read/write（可读/可写）的缓存，意味着对象检索不是共享的，而且可以安全地被调用者修改，而不干扰其他调用者或线程所做的潜在修改</li>
+</ul>
+</li>
+<li>
+<p><strong>缓存可用的回收策略</strong></p>
+<ul>
+<li><strong>LRU – 最近最少使用的</strong>：移出最近较长周期内都没有被使用的对象</li>
+<li><strong>FIFO – 先进先出</strong>：按对象进入缓存的顺序来移除</li>
+<li><strong>SOFT – 软引用</strong>：移除基于垃圾回收器状态和软引用规则的对象</li>
+<li><strong>WEAK – 弱引用</strong>：强制性地移除基于垃圾收集器状态和弱引用规则的对象</li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-05</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/mybatis/">MyBatis</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/mybatis3_%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" class="prev" rel="prev" title="【MyBatis】3_配置文件"><i class="fas fa-angle-left fa-fw"></i>【MyBatis】3_配置文件</a>
+            <a href="/posts/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80/" class="next" rel="next" title="【MyBatis】5_关联映射之一对一">【MyBatis】5_关联映射之一对一<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

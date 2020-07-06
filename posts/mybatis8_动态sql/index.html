@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【MyBatis】8_动态SQL - </title><meta name="Description" content=""><meta property="og:title" content="【MyBatis】8_动态SQL" />
+<meta property="og:description" content="MyBatis 框架 8 动态 SQL 8.1 概念 减少根据不同条件拼接 SQL 语句的操作 MyBatis 采用 OGNL 表达式来消除其他元素 MyBatis 动态 SQL 元素与 JSTL 或其他类 XML 文件处理器相似，常用的动态 SQL 元素有" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/mybatis8_%E5%8A%A8%E6%80%81sql/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-06-10T21:13:44+08:00" />
+<meta property="article:modified_time" content="2020-06-10T21:13:44+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【MyBatis】8_动态SQL"/>
+<meta name="twitter:description" content="MyBatis 框架 8 动态 SQL 8.1 概念 减少根据不同条件拼接 SQL 语句的操作 MyBatis 采用 OGNL 表达式来消除其他元素 MyBatis 动态 SQL 元素与 JSTL 或其他类 XML 文件处理器相似，常用的动态 SQL 元素有"/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/mybatis8_%E5%8A%A8%E6%80%81sql/" /><link rel="prev" href="http://example.org/posts/mybatis7_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E5%A4%9A%E5%AF%B9%E5%A4%9A/" /><link rel="next" href="http://example.org/posts/mybatis9_%E6%B3%A8%E8%A7%A3/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【MyBatis】8_动态SQL",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/mybatis8_%E5%8A%A8%E6%80%81sql\/"
+        },"genre": "posts","keywords": "Java, MyBatis","wordcount":  1392 ,
+        "url": "http:\/\/example.org\/posts\/mybatis8_%E5%8A%A8%E6%80%81sql\/","datePublished": "2020-06-10T21:13:44+08:00","dateModified": "2020-06-10T21:13:44+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【MyBatis】8_动态SQL</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-10">2020-06-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1392 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#8-动态-sql">8 动态 SQL</a>
+      <ul>
+        <li><a href="#81-概念">8.1 概念</a></li>
+        <li><a href="#82-准备工作">8.2 准备工作</a></li>
+        <li><a href="#83-if">8.3 if</a></li>
+        <li><a href="#84-choose">8.4 choose</a></li>
+        <li><a href="#85-trim-whereset">8.5 trim (where,set)</a></li>
+        <li><a href="#86-foreach">8.6 foreach</a></li>
+        <li><a href="#87-bind">8.7 bind</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="mybatis-框架">MyBatis 框架</h1>
+<h2 id="8-动态-sql">8 动态 SQL</h2>
+<h3 id="81-概念">8.1 概念</h3>
+<ul>
+<li>减少根据不同条件拼接 SQL 语句的操作</li>
+<li>MyBatis 采用 <strong>OGNL 表达式</strong>来消除其他元素</li>
+<li>MyBatis 动态 SQL 元素与 JSTL 或其他类 XML 文件处理器相似，常用的动态 SQL 元素有
+<ul>
+<li><strong>if</strong></li>
+<li><strong>choose (when/otherwise)</strong></li>
+<li><strong>trim (where/set)</strong></li>
+<li><strong>foreach</strong></li>
+<li><strong>bind</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="82-准备工作">8.2 准备工作</h3>
+<ul>
+<li>
+<p><strong>创建 User 表</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-mysql" data-lang="mysql"><span class="k">create</span> <span class="k">table</span> <span class="k">user</span><span class="p">(</span>
+<span class="n">id</span> <span class="kt">int</span> <span class="k">primary</span> <span class="k">key</span> <span class="kp">auto_increment</span><span class="p">,</span>
+<span class="n">username</span> <span class="kt">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+<span class="n">password</span> <span class="kt">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+<span class="n">sex</span> <span class="kt">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="n">age</span> <span class="kt">int</span><span class="p">,</span>
+<span class="n">phone</span> <span class="kt">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+<span class="n">address</span> <span class="kt">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span>
+  
+<span class="k">insert</span> <span class="k">into</span> 
+<span class="k">user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="n">sex</span><span class="p">,</span><span class="n">age</span><span class="p">,</span><span class="n">phone</span><span class="p">,</span><span class="n">address</span><span class="p">)</span>
+<span class="k">values</span><span class="p">(</span><span class="s1">&#39;Tom&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">,</span><span class="s1">&#39;male&#39;</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="s1">&#39;18200123456&#39;</span><span class="p">,</span><span class="s1">&#39;chengdu&#39;</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>User 表的实体类</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span> <span class="c1">// id，主键
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span> <span class="c1">// 用户名
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span> <span class="c1">// 密码
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">String</span> <span class="n">sex</span><span class="o">;</span> <span class="c1">// 性别
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">age</span><span class="o">;</span> <span class="c1">// 年龄
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">String</span> <span class="n">phone</span><span class="o">;</span> <span class="c1">// 电话
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">String</span> <span class="n">address</span><span class="o">;</span> <span class="c1">// 地址
+</span><span class="c1"></span>  
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getUsername</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">username</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPassword</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="o">(</span><span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getSex</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">sex</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSex</span><span class="o">(</span><span class="n">String</span> <span class="n">sex</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">sex</span> <span class="o">=</span> <span class="n">sex</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="n">Integer</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPhone</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">phone</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPhone</span><span class="o">(</span><span class="n">String</span> <span class="n">phone</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">phone</span> <span class="o">=</span> <span class="n">phone</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getAddress</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">address</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAddress</span><span class="o">(</span><span class="n">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="83-if">8.3 if</h3>
+<ul>
+<li>
+<p><strong>if 在 where 子句中做简单的条件判断</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 如果没有提供参数 address 会查询所有性别为 male 的用户的所有信息，
+</span><span class="c">      如果提供了参数 address，那么就会查询性别为 male，且地址为传入内容的用户的所有信息 --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;dynamicIfTest&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user where sex = &#39;male&#39;
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;address != null&#34;</span><span class="nt">&gt;</span>
+        and address = #{address}
+    <span class="nt">&lt;/if&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>可选两个条件进行查询只需加入另一条件</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;dynamicIfTest&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user where sex = &#39;male&#39;
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;address != null&#34;</span><span class="nt">&gt;</span>
+      and address = #{address}
+    <span class="nt">&lt;/if&gt;</span>
+    <span class="c">&lt;!-- 第二个条件 --&gt;</span>
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;phone != null&#34;</span><span class="nt">&gt;</span>
+        and phone like #{phone}
+    <span class="nt">&lt;/if&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="84-choose">8.4 choose</h3>
+<ul>
+<li>
+<p><strong>choose 在所有条件中选择其中一部分</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 按照顺序执行，当 when 中有条件满足时，则跳出 choose;
+</span><span class="c">      when 和 otherwise 中只会输出一个，
+</span><span class="c">      所有 when 的条件都不满足就输出 otherwise 的内容 --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;dynamicChooseTest&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user where sex = &#39;male&#39;
+    <span class="nt">&lt;choose&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">&#34;username != null&#34;</span><span class="nt">&gt;</span>
+            and userne like #{username}
+        <span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">&#34;phone != null&#34;</span><span class="nt">&gt;</span>
+            and phone like #{phone}
+        <span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;otherwise&gt;</span>
+            and address = &#39;chengdu&#39;
+        <span class="nt">&lt;/otherwise&gt;</span>
+    <span class="nt">&lt;/choose&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="85-trim-whereset">8.5 trim (where,set)</h3>
+<ul>
+<li>
+<p><strong>trim (where,set) 用于解决多个条件不满足或前面条件不满足，后面条件满足的情况</strong></p>
+</li>
+<li>
+<p><strong>trim</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-XML" data-lang="XML"><span class="c">&lt;!-- trim 元素可以给自己包含的内容加上前缀（prefix）或加上后缀（suffix），
+</span><span class="c">      也可以把包含内容的首部（prefixOverrides）或尾部（suffixOverrides）某些内容移除 --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;dynamicTrimTest&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user
+    <span class="nt">&lt;trim</span> <span class="na">prefix=</span><span class="s">&#34;where&#34;</span> <span class="na">prefixOverrides=</span><span class="s">&#34;and |or &#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;address != null&#34;</span><span class="nt">&gt;</span>
+              address = #{address}
+        <span class="nt">&lt;/if&gt;</span>
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;phone != null&#34;</span><span class="nt">&gt;</span>
+            and phone like #{phone}
+        <span class="nt">&lt;/if&gt;</span>
+    <span class="nt">&lt;/trim&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>where</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- where 元素只有在一个以上的 if 条件满足的情况下才去插入 where 子句，
+</span><span class="c">      能够智能地处理 and 和 or 条件 --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;dynamicWhereTest&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user
+    <span class="nt">&lt;where&gt;</span>
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;address != null&#34;</span><span class="nt">&gt;</span>
+            address = #{address}
+        <span class="nt">&lt;/if&gt;</span>
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;phone != null&#34;</span><span class="nt">&gt;</span>
+            and phone like #{phone}
+        <span class="nt">&lt;/if&gt;</span>
+    <span class="nt">&lt;/where&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>set</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- set 元素可以被用于动态包含需要更新的列，而舍去其他的列 --&gt;</span>
+<span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">&#34;dynamicSetTest&#34;</span><span class="nt">&gt;</span>
+    update User
+    <span class="nt">&lt;set&gt;</span>
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;phone != null&#34;</span><span class="nt">&gt;</span>phone=#{phone},<span class="nt">&lt;/if&gt;</span>
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&#34;address != null&#34;</span><span class="nt">&gt;</span>address=#{address}<span class="nt">&lt;/if&gt;</span>
+    <span class="nt">&lt;/set&gt;</span>
+    where id=#{id}
+<span class="nt">&lt;/update&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- set 元素会动态前置 set 关键字，同时也会消除无关的逗号 --&gt;</span>
+<span class="c">&lt;!-- 等价于 --&gt;</span>
+<span class="nt">&lt;trim</span> <span class="na">prefix=</span><span class="s">&#34;set&#34;</span> <span class="na">suffixOverrides=</span><span class="s">&#34;,&#34;</span><span class="nt">&gt;</span>
+    ...
+<span class="nt">&lt;/trim&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="86-foreach">8.6 foreach</h3>
+<ul>
+<li>
+<p><strong>foreach 元素常用于需要对一个集合进行遍历时，尤其是 in 语句查询时</strong></p>
+</li>
+<li>
+<p><strong>foreach  元素主要属性</strong></p>
+<ul>
+<li><strong>item</strong>：本次迭代获取的元素，当使用字典或者 Map 时，index 是键，item 是值</li>
+<li><strong>index</strong>：当前迭代的次数，当使用字典或者 Map 时，index 是键，item 是值</li>
+<li><strong>open</strong>：开始标志</li>
+<li><strong>separator</strong>：每次迭代之间的分隔符</li>
+<li><strong>close</strong>：结束标志</li>
+<li><strong>collection</strong>：该属性是必须指定的，在不同情况下，该属性的值是不一样的主要有一下 3 种情况
+<ul>
+<li>单参数且为 List 时，值为 list 单参数且为 array 数组时，值为 array 多参数需封装成一个 Map，map 的 key 就是参数名，collection 属性值是传入的 List 或 array 对象在自己封装的 map 里面的 key</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;dynamicForeachTest&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    select * from user where id in
+    <span class="nt">&lt;foreach</span> <span class="na">item=</span><span class="s">&#34;item&#34;</span> <span class="na">index=</span><span class="s">&#34;index&#34;</span> <span class="na">collection=</span><span class="s">&#34;list&#34;</span>
+             <span class="na">open=</span><span class="s">&#34;(&#34;</span> <span class="na">separator=</span><span class="s">&#34;,&#34;</span> <span class="na">close=</span><span class="s">&#34;)&#34;</span><span class="nt">&gt;</span>
+        #{item}
+    <span class="nt">&lt;/foreach&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// collection 值为 list，其对应的 Mapper 如下
+</span><span class="c1"></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">dynamicForeachTest</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">ids</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="87-bind">8.7 bind</h3>
+<ul>
+<li>
+<p><strong>从 OGNL 表达式中创建一个变量并将其绑定到上下文</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;dynamicBindTest&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;bind</span> <span class="na">name=</span><span class="s">&#34;pattern&#34;</span> <span class="na">value=</span><span class="s">&#34;&#39;%&#39; + _parameter.getPhone() + &#39;%&#39;&#34;</span> <span class="nt">/&gt;</span>
+    select * from user where phone like #{pattern}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-10</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/mybatis/">MyBatis</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/mybatis7_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E5%A4%9A%E5%AF%B9%E5%A4%9A/" class="prev" rel="prev" title="【MyBatis】7_关联映射之多对多"><i class="fas fa-angle-left fa-fw"></i>【MyBatis】7_关联映射之多对多</a>
+            <a href="/posts/mybatis9_%E6%B3%A8%E8%A7%A3/" class="next" rel="next" title="【MyBatis】9_注解">【MyBatis】9_注解<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
