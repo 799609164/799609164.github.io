@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>【MyBatis】5_关联映射之一对一 - </title><meta name="Description" content=""><meta property="og:title" content="【MyBatis】5_关联映射之一对一" />
-<meta property="og:description" content="MyBatis 框架 5 关联映射之一对一 5.1 三种关联关系 例：班主任、班级、学生、课程 一对一：一个班主任只属于一个班级，一个班级也只能有一个班主任 一对多：一个班" />
+        <title>【Mybatis】5_关联映射之一对一 - </title><meta name="Description" content=""><meta property="og:title" content="【Mybatis】5_关联映射之一对一" />
+<meta property="og:description" content="Mybatis 框架 5 关联映射之一对一 示例代码 5.1 三种关联关系 例：班主任、班级、学生、课程 一对一：一个班主任只属于一个班级，一个班级也只能有一个班主任 一对多" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://example.org/posts/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80/" />
 <meta property="og:image" content="http://example.org/logo.png"/>
@@ -15,19 +15,19 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="http://example.org/logo.png"/>
 
-<meta name="twitter:title" content="【MyBatis】5_关联映射之一对一"/>
-<meta name="twitter:description" content="MyBatis 框架 5 关联映射之一对一 5.1 三种关联关系 例：班主任、班级、学生、课程 一对一：一个班主任只属于一个班级，一个班级也只能有一个班主任 一对多：一个班"/>
+<meta name="twitter:title" content="【Mybatis】5_关联映射之一对一"/>
+<meta name="twitter:description" content="Mybatis 框架 5 关联映射之一对一 示例代码 5.1 三种关联关系 例：班主任、班级、学生、课程 一对一：一个班主任只属于一个班级，一个班级也只能有一个班主任 一对多"/>
 <meta name="application-name" content="QiChuan&#39;s Blog">
 <meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80/" /><link rel="prev" href="http://example.org/posts/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6/" /><link rel="next" href="http://example.org/posts/mybatis6_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E5%A4%9A/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "【MyBatis】5_关联映射之一对一",
+        "headline": "【Mybatis】5_关联映射之一对一",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80\/"
-        },"genre": "posts","keywords": "Java, MyBatis","wordcount":  1398 ,
+        },"genre": "posts","keywords": "Java, Mybatis","wordcount":  1370 ,
         "url": "http:\/\/example.org\/posts\/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80\/","datePublished": "2020-06-07T16:52:48+08:00","dateModified": "2020-06-07T16:52:48+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": ""},"description": ""
@@ -99,9 +99,9 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">目录</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">【MyBatis】5_关联映射之一对一</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animated flipInX">【Mybatis】5_关联映射之一对一</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-07">2020-06-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1398 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-07">2020-06-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1370 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -126,8 +126,9 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="mybatis-框架">MyBatis 框架</h1>
+            </div><div class="content" id="content"><h1 id="mybatis-框架">Mybatis 框架</h1>
 <h2 id="5-关联映射之一对一">5 关联映射之一对一</h2>
+<p><a href="https://github.com/799609164/JavaSampleCode/tree/master/<sup>Mybatis</sup>/<sub>Mybatis</sub>5_%e5%85%b3%e8%81%94%e6%98%a0%e5%b0%84%e4%b9%8b%e4%b8%80%e5%af%b9%e4%b8%80/OneToOne" target="_blank" rel="noopener noreffer">示例代码</a></p>
 <h3 id="51-三种关联关系">5.1 三种关联关系</h3>
 <ul>
 <li><strong>例</strong>：班主任、班级、学生、课程
@@ -249,16 +250,16 @@
          <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
          <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0 
 </span><span class="s">                             http://maven.apache.org/maven-v4_0_0.xsd&#34;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
-  <span class="nt">&lt;groupId&gt;</span>xxx.mybatis.onetoone<span class="nt">&lt;/groupId&gt;</span>
-  <span class="nt">&lt;artifactId&gt;</span>OneToOne<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;packaging&gt;</span>jar<span class="nt">&lt;/packaging&gt;</span>
-  <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
-  <span class="nt">&lt;name&gt;</span>OneToOne<span class="nt">&lt;/name&gt;</span>
-  <span class="nt">&lt;url&gt;</span>http://maven.apache.org<span class="nt">&lt;/url&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>xxx.mybatis.onetoone<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>OneToOne<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;packaging&gt;</span>jar<span class="nt">&lt;/packaging&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>OneToOne<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;url&gt;</span>http://maven.apache.org<span class="nt">&lt;/url&gt;</span>
       
-  <span class="nt">&lt;dependencies&gt;</span>
-      <span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>org.mybatis<span class="nt">&lt;/groupId&gt;</span>
             <span class="nt">&lt;artifactId&gt;</span>mybatis<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;version&gt;</span>3.4.6<span class="nt">&lt;/version&gt;</span>
@@ -435,7 +436,6 @@
 </span><span class="lnt">40
 </span><span class="lnt">41
 </span><span class="lnt">42
-</span><span class="lnt">43
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">xxx.mybatis.onetoone.model</span><span class="o">;</span>
@@ -443,7 +443,6 @@
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Classes</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-      
     <span class="c1">// 用于映射一对一的关联关系
 </span><span class="c1"></span>    <span class="kd">private</span> <span class="n">HeadTeacher</span> <span class="n">teacher</span><span class="o">;</span>
   
@@ -505,7 +504,6 @@
 </span><span class="lnt">12
 </span><span class="lnt">13
 </span><span class="lnt">14
-</span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">xxx.mybatis.onetoone.mapper</span><span class="o">;</span>
@@ -519,9 +517,8 @@
 </span><span class="cm">     * @return
 </span><span class="cm">     * @throws Exception
 </span><span class="cm">     */</span>
-    <span class="c1">// 返回 Classes 类，Classes 类中包含了一个 HeadTeacher 类的对象
+     <span class="c1">// 返回 Classes 类，Classes 类中包含了一个 HeadTeacher 类的对象
 </span><span class="c1"></span>    <span class="kd">public</span> <span class="n">Classes</span> <span class="nf">selectClassById</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span>
-  
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -566,7 +563,7 @@
     <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&#34;classmap&#34;</span> <span class="na">type=</span><span class="s">&#34;Classes&#34;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;id</span> <span class="na">property=</span><span class="s">&#34;id&#34;</span> <span class="na">column=</span><span class="s">&#34;c_id&#34;</span> <span class="nt">/&gt;</span>
         <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;name&#34;</span> <span class="na">column=</span><span class="s">&#34;c_name&#34;</span> <span class="nt">/&gt;</span>
-          
+  
         <span class="c">&lt;!-- 一对一关联映射：association --&gt;</span>
         <span class="c">&lt;!-- property 实体类中的一个属性 --&gt;</span>
         <span class="nt">&lt;association</span> <span class="na">property=</span><span class="s">&#34;teacher&#34;</span> <span class="na">javaType=</span><span class="s">&#34;HeadTeacher&#34;</span><span class="nt">&gt;</span>
@@ -594,6 +591,7 @@
 </span><span class="lnt">12
 </span><span class="lnt">13
 </span><span class="lnt">14
+</span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-xml" data-lang="xml">  <span class="c">&lt;!-- 若使得 HeadTeacher 的结果映射可以重用，
@@ -607,6 +605,7 @@
   <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&#34;classmap&#34;</span> <span class="na">type=</span><span class="s">&#34;Classes&#34;</span><span class="nt">&gt;</span>
       <span class="nt">&lt;id</span> <span class="na">property=</span><span class="s">&#34;id&#34;</span> <span class="na">column=</span><span class="s">&#34;c_id&#34;</span> <span class="nt">/&gt;</span>
       <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&#34;name&#34;</span> <span class="na">column=</span><span class="s">&#34;c_name&#34;</span> <span class="nt">/&gt;</span>
+        
       <span class="c">&lt;!-- 一对一关联映射：association --&gt;</span>
       <span class="nt">&lt;association</span> <span class="na">property=</span><span class="s">&#34;teacher&#34;</span> <span class="na">column=</span><span class="s">&#34;c_ht_id&#34;</span> <span class="na">javaType=</span><span class="s">&#34;HeadTeacher&#34;</span> <span class="na">resultMap=</span><span class="s">&#34;teachermap&#34;</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;/resultMap&gt;</span>
@@ -617,7 +616,7 @@
 <h3 id="57-配置文件">5.7 配置文件</h3>
 <ul>
 <li>
-<p><strong>src/main/resources/mybatis.xml</strong></p>
+<p><strong>src/main/resources/maybatis.cfg.xml</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -661,15 +660,15 @@
         <span class="c">&lt;!-- 指定一个包名起别名，将包内的 Java 类的类名作为类的类别名 --&gt;</span>
         <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">&#34;xxx.mybatis.onetoone.model&#34;</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/typeAliases&gt;</span>
-         
+  
     <span class="c">&lt;!-- 配置 mybatis 运行环境 --&gt;</span>
     <span class="nt">&lt;environments</span> <span class="na">default=</span><span class="s">&#34;development&#34;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;environment</span> <span class="na">id=</span><span class="s">&#34;development&#34;</span><span class="nt">&gt;</span>
-           <span class="c">&lt;!-- type=&#34;JDBC&#34; 代表直接使用 JDBC 的提交和回滚设置 --&gt;</span>
+            <span class="c">&lt;!-- type=&#34;JDBC&#34; 代表直接使用 JDBC 的提交和回滚设置 --&gt;</span>
             <span class="nt">&lt;transactionManager</span> <span class="na">type=</span><span class="s">&#34;JDBC&#34;</span> <span class="nt">/&gt;</span>
   
             <span class="c">&lt;!-- POOLED 表示支持 JDBC 数据源连接池 --&gt;</span>
-            <span class="c">&lt;!-- 数据库连接池，由 Mybatis 管理，数据库名是 mybatis，MySQL 用户名 root，密码为空 --&gt;</span>
+            <span class="c">&lt;!-- 数据库连接池，由 Mybatis 管理 --&gt;</span>
             <span class="nt">&lt;dataSource</span> <span class="na">type=</span><span class="s">&#34;POOLED&#34;</span><span class="nt">&gt;</span>
                 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;driver&#34;</span> <span class="na">value=</span><span class="s">&#34;com.mysql.jdbc.Driver&#34;</span> <span class="nt">/&gt;</span>
                 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;url&#34;</span> <span class="na">value=</span><span class="s">&#34;jdbc:mysql://localhost:3306/mybatis&#34;</span> <span class="nt">/&gt;</span>
@@ -801,7 +800,7 @@ log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n
             <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
         <span class="o">}</span>
   
-        <span class="c1">// 创建会话工厂，传入 MyBatis 的配置文件信息
+        <span class="c1">// 创建会话工厂，传入 Mybatis 的配置文件信息
 </span><span class="c1"></span>        <span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">inputStream</span><span class="o">);</span>
   
         <span class="c1">// 通过工厂得到 SqlSession
@@ -852,14 +851,14 @@ log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/mybatis/">MyBatis</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/mybatis/">Mybatis</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6/" class="prev" rel="prev" title="【MyBatis】4_映射文件"><i class="fas fa-angle-left fa-fw"></i>【MyBatis】4_映射文件</a>
-            <a href="/posts/mybatis6_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E5%A4%9A/" class="next" rel="next" title="【MyBatis】6_关联映射之一对多">【MyBatis】6_关联映射之一对多<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6/" class="prev" rel="prev" title="【Mybatis】4_映射文件"><i class="fas fa-angle-left fa-fw"></i>【Mybatis】4_映射文件</a>
+            <a href="/posts/mybatis6_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E5%A4%9A/" class="next" rel="next" title="【Mybatis】6_关联映射之一对多">【Mybatis】6_关联映射之一对多<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">

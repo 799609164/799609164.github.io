@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>【MyBatis】4_映射文件 - </title><meta name="Description" content=""><meta property="og:title" content="【MyBatis】4_映射文件" />
-<meta property="og:description" content="MyBatis 框架 4 映射文件 MyBatis 中文文档——Mapper XML 文件 4.1 回顾 映射文件是放置 SQL 语句的地方，写好 SQL 语句映射文件后，在配置文件的 mappers 标签中引用，使得程序省" />
+        <title>【Mybatis】4_映射文件 - </title><meta name="Description" content=""><meta property="og:title" content="【Mybatis】4_映射文件" />
+<meta property="og:description" content="Mybatis 框架 4 映射文件 Mybatis 中文文档——Mapper XML 文件 4.1 回顾 映射文件是放置 SQL 语句的地方，写好 SQL 语句映射文件后，在配置文件的 mappers 标签中引用，使得程序省" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://example.org/posts/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6/" />
 <meta property="og:image" content="http://example.org/logo.png"/>
@@ -15,19 +15,19 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="http://example.org/logo.png"/>
 
-<meta name="twitter:title" content="【MyBatis】4_映射文件"/>
-<meta name="twitter:description" content="MyBatis 框架 4 映射文件 MyBatis 中文文档——Mapper XML 文件 4.1 回顾 映射文件是放置 SQL 语句的地方，写好 SQL 语句映射文件后，在配置文件的 mappers 标签中引用，使得程序省"/>
+<meta name="twitter:title" content="【Mybatis】4_映射文件"/>
+<meta name="twitter:description" content="Mybatis 框架 4 映射文件 Mybatis 中文文档——Mapper XML 文件 4.1 回顾 映射文件是放置 SQL 语句的地方，写好 SQL 语句映射文件后，在配置文件的 mappers 标签中引用，使得程序省"/>
 <meta name="application-name" content="QiChuan&#39;s Blog">
 <meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6/" /><link rel="prev" href="http://example.org/posts/mybatis3_%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" /><link rel="next" href="http://example.org/posts/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "【MyBatis】4_映射文件",
+        "headline": "【Mybatis】4_映射文件",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6\/"
-        },"genre": "posts","keywords": "Java, MyBatis","wordcount":  3138 ,
+        },"genre": "posts","keywords": "Java, Mybatis","wordcount":  3133 ,
         "url": "http:\/\/example.org\/posts\/mybatis4_%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6\/","datePublished": "2020-06-05T19:34:38+08:00","dateModified": "2020-06-05T19:34:38+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": ""},"description": ""
@@ -99,9 +99,9 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">目录</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">【MyBatis】4_映射文件</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animated flipInX">【Mybatis】4_映射文件</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-05">2020-06-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3138 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-05">2020-06-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3133 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -124,9 +124,9 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="mybatis-框架">MyBatis 框架</h1>
+            </div><div class="content" id="content"><h1 id="mybatis-框架">Mybatis 框架</h1>
 <h2 id="4-映射文件">4 映射文件</h2>
-<p><a href="http://www.mybatis.org/mybatis-3/zh/sqlmap-xml.html" target="_blank" rel="noopener noreffer">MyBatis 中文文档——Mapper XML 文件</a></p>
+<p><a href="http://www.mybatis.org/mybatis-3/zh/sqlmap-xml.html" target="_blank" rel="noopener noreffer">Mybatis 中文文档——Mapper XML 文件</a></p>
 <h3 id="41-回顾">4.1 回顾</h3>
 <ul>
 <li>
@@ -216,7 +216,7 @@
     <span class="nt">&lt;/delete&gt;</span>
   
     <span class="c">&lt;!-- 如未为 Java Bean 起类别名，resultType=&#34;com.xxx.mybatis.model.User&#34; --&gt;</span>
-    <span class="c">&lt;!-- 使用 resultType 时，一定要保证，你属性名与字段名相同；如果不相同，就使用 resultMap --&gt;</span>
+    <span class="c">&lt;!-- 使用 resultType 时，要保证属性名与字段名相同；如果不相同，使用 resultMap --&gt;</span>
     <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUserById&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
         select * from user where id=#{id}
     <span class="nt">&lt;/select&gt;</span>
@@ -380,7 +380,7 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- MyBatis 会在幕后自动创建一个 resultMap，基于属性名来映射列到 JavaBean 的属性上 --&gt;</span>
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- Mybatis 会在幕后自动创建一个 resultMap，基于属性名来映射列到 JavaBean 的属性上 --&gt;</span>
 <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&#34;selectUserById&#34;</span> <span class="na">parameterType=</span><span class="s">&#34;int&#34;</span> <span class="na">resultType=</span><span class="s">&#34;User&#34;</span><span class="nt">&gt;</span>
     select * from user where id=#{id}
 <span class="nt">&lt;/select&gt;</span>
@@ -577,7 +577,7 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 对于不支持自增长 id 的 JDBC 驱动来说， MyBatis 采用 selectKey 生成主键 --&gt;</span>
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 对于不支持自增长 id 的 JDBC 驱动来说， Mybatis 采用 selectKey 生成主键 --&gt;</span>
 <span class="c">&lt;!-- 在插入时使用 --&gt;</span>
 <span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">&#34;insertUser&#34;</span><span class="nt">&gt;</span>
     <span class="c">&lt;!-- 使用 select seq_users.nextval from dual 生成一个 key --&gt;</span>
@@ -591,7 +591,7 @@
 </div><ul>
 <li><strong>keyProperty</strong>：selectKey 语句结果应该被设置的目标属性</li>
 <li><strong>keyColumn</strong>： 匹配属性的返回结果集中的列名称</li>
-<li><strong>resultType</strong>： 结果的类型，MyBatis 允许任何简单类型（包括字符串）作为主键的类型</li>
+<li><strong>resultType</strong>： 结果的类型，Mybatis 允许任何简单类型（包括字符串）作为主键的类型</li>
 <li><strong>order</strong>：可设置为 BEFORE 或 AFTER；
 <ul>
 <li>设置为 BEFORE，那么它会首先选择主键，设置 keyProperty 然后执行 insert 语句</li>
@@ -605,8 +605,8 @@
 <ul>
 <li><strong>id</strong>：命名空间中唯一的标识符，可被其他语句引用</li>
 <li><strong>parameterType</strong>：传入该语句的参数的完全限定名或别名</li>
-<li><strong>useGeneratedKeys</strong>：（仅对 insert 和 update 有用）令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（像 MySQL 和 SQL Server 这样的关系数据库管理系统的自动递增字段；Oracle不支持自增长 id，设置为 true 会报错），默认为 false</li>
-<li><strong>keyProperty</strong>：（仅对 insert 和 update 有用）唯一标记一个属性，MyBatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值，默认为 unset</li>
+<li><strong>useGeneratedKeys</strong>：（仅对 insert 和 update 有用）令 Mybatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键（像 MySQL 和 SQL Server 这样的关系数据库管理系统的自动递增字段；Oracle不支持自增长 id，设置为 true 会报错），默认为 false</li>
+<li><strong>keyProperty</strong>：（仅对 insert 和 update 有用）唯一标记一个属性，Mybatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值，默认为 unset</li>
 <li><strong>keyColumn</strong>：（仅对 insert 和 update 有用）通过生成的键值设置表中的列名，这个设置仅在某些数据库（像 PostgreSQL）是必须的，当主键列不是表中的第一列的时候需要设置</li>
 <li>&hellip;</li>
 </ul>
@@ -698,8 +698,8 @@
 <li>
 <p><strong>字符串替换</strong></p>
 <ul>
-<li>默认情况下，使用 <code>#{}</code> 格式的语法会使 MyBatis 创建预处理语句属性并安全地设置值（比如？），这样做更安全，更迅速</li>
-<li>如果想直接在 SQL 语句中插入一个不改变的字符串，比如 ORDER BY，可以使用： <code>ORDER BY ${columnName}</code>，MyBatis 不会修改或转义该字符串</li>
+<li>默认情况下，使用 <code>#{}</code> 格式的语法会使 Mybatis 创建预处理语句属性并安全地设置值（比如？），这样做更安全，更迅速</li>
+<li>如果想直接在 SQL 语句中插入一个不改变的字符串，比如 ORDER BY，可以使用： <code>ORDER BY ${columnName}</code>，Mybatis 不会修改或转义该字符串</li>
 <li><strong>注</strong>： 以上述方法接受用户的输入数据是不安全的，容易造成 SQL 注入攻击；因此，要么不允许用户输入，要么自行转义并检验</li>
 </ul>
 </li>
@@ -774,14 +774,14 @@
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/mybatis/">MyBatis</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/mybatis/">Mybatis</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/mybatis3_%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" class="prev" rel="prev" title="【MyBatis】3_配置文件"><i class="fas fa-angle-left fa-fw"></i>【MyBatis】3_配置文件</a>
-            <a href="/posts/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80/" class="next" rel="next" title="【MyBatis】5_关联映射之一对一">【MyBatis】5_关联映射之一对一<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/mybatis3_%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" class="prev" rel="prev" title="【Mybatis】3_配置文件"><i class="fas fa-angle-left fa-fw"></i>【Mybatis】3_配置文件</a>
+            <a href="/posts/mybatis5_%E5%85%B3%E8%81%94%E6%98%A0%E5%B0%84%E4%B9%8B%E4%B8%80%E5%AF%B9%E4%B8%80/" class="next" rel="next" title="【Mybatis】5_关联映射之一对一">【Mybatis】5_关联映射之一对一<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">

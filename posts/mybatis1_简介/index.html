@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>【MyBatis】1_简介 - </title><meta name="Description" content=""><meta property="og:title" content="【MyBatis】1_简介" />
-<meta property="og:description" content="MyBatis 框架 1 简介 1.1 概念 ORM（Object/Relational Mapping），即对象关系映射，实现面向对象的编程语言到关系数据库的映射 ORM 工具" />
+        <title>【Mybatis】1_简介 - </title><meta name="Description" content=""><meta property="og:title" content="【Mybatis】1_简介" />
+<meta property="og:description" content="Mybatis 框架 1 简介 1.1 概念 ORM（Object/Relational Mapping），即对象关系映射，实现面向对象的编程语言到关系数据库的映射 ORM 工具" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://example.org/posts/mybatis1_%E7%AE%80%E4%BB%8B/" />
 <meta property="og:image" content="http://example.org/logo.png"/>
@@ -15,19 +15,19 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="http://example.org/logo.png"/>
 
-<meta name="twitter:title" content="【MyBatis】1_简介"/>
-<meta name="twitter:description" content="MyBatis 框架 1 简介 1.1 概念 ORM（Object/Relational Mapping），即对象关系映射，实现面向对象的编程语言到关系数据库的映射 ORM 工具"/>
+<meta name="twitter:title" content="【Mybatis】1_简介"/>
+<meta name="twitter:description" content="Mybatis 框架 1 简介 1.1 概念 ORM（Object/Relational Mapping），即对象关系映射，实现面向对象的编程语言到关系数据库的映射 ORM 工具"/>
 <meta name="application-name" content="QiChuan&#39;s Blog">
 <meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/mybatis1_%E7%AE%80%E4%BB%8B/" /><link rel="next" href="http://example.org/posts/mybatis2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "【MyBatis】1_简介",
+        "headline": "【Mybatis】1_简介",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/mybatis1_%E7%AE%80%E4%BB%8B\/"
-        },"genre": "posts","keywords": "Java, MyBatis","wordcount":  1127 ,
+        },"genre": "posts","keywords": "Java, Mybatis","wordcount":  1127 ,
         "url": "http:\/\/example.org\/posts\/mybatis1_%E7%AE%80%E4%BB%8B\/","datePublished": "2020-06-02T20:12:03+08:00","dateModified": "2020-06-02T20:12:03+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": ""},"description": ""
@@ -99,7 +99,7 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">目录</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">【MyBatis】1_简介</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animated flipInX">【Mybatis】1_简介</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
             <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-02">2020-06-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1127 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
@@ -120,7 +120,7 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="mybatis-框架">MyBatis 框架</h1>
+            </div><div class="content" id="content"><h1 id="mybatis-框架">Mybatis 框架</h1>
 <h2 id="1-简介">1 简介</h2>
 <h3 id="11-概念">1.1 概念</h3>
 <ul>
@@ -139,13 +139,13 @@
 </ul>
 </li>
 <li>
-<p><strong>MyBatis 的主要思想</strong>：将程序中的大量 SQL 语句抽取出来，配置在配置文件中，以实现 SQL 的灵活配置</p>
+<p><strong>Mybatis 的主要思想</strong>：将程序中的大量 SQL 语句抽取出来，配置在配置文件中，以实现 SQL 的灵活配置</p>
 </li>
 <li>
-<p>MyBatis 可以对配置和原生 Map 使用简单的 XML 或注解，将接口和 Java 的 POJO 类映射成数据库中的记录</p>
+<p>Mybatis 可以对配置和原生 Map 使用简单的 XML 或注解，将接口和 Java 的 POJO 类映射成数据库中的记录</p>
 </li>
 <li>
-<p>MyBatis 并不完全是一种 ORM 框架，它的设计思想和 ORM 相似，只是它允许直接编写 SQL 语句，使得数据库访问更加灵活；准确地说，MyBatis 提供了一种“半自动化”的 ORM 实现，是一种 &ldquo;SQL Mapping&rdquo; 框架</p>
+<p>Mybatis 并不完全是一种 ORM 框架，它的设计思想和 ORM 相似，只是它允许直接编写 SQL 语句，使得数据库访问更加灵活；准确地说，Mybatis 提供了一种“半自动化”的 ORM 实现，是一种 &ldquo;SQL Mapping&rdquo; 框架</p>
 </li>
 </ul>
 <h3 id="12-功能架构">1.2 功能架构</h3>
@@ -176,7 +176,7 @@
 <ul>
 <li><strong>加载配置</strong>
 <ul>
-<li>MyBatis 应用程序根据 XML 配置文件加载运行环境，创建 SqlSessionFactory ，将 SQL 的配置信息加载成为一个个 MappedStatement 对象，包括传入参数映射配置、执行的 SQL 语句、结果映射配置，存储在内存中</li>
+<li>Mybatis 应用程序根据 XML 配置文件加载运行环境，创建 SqlSessionFactory ，将 SQL 的配置信息加载成为一个个 MappedStatement 对象，包括传入参数映射配置、执行的 SQL 语句、结果映射配置，存储在内存中</li>
 </ul>
 </li>
 <li><strong>SQL 解析</strong>
@@ -209,10 +209,10 @@
 <li>
 <p><strong>与 JDBC、Hibernate 的区别</strong></p>
 <ul>
-<li>MyBatis 在 JDBC 的基础上做了，OO化、封装事务管理接口等，依然要通过 JDBC 完成数据查询、更新等操作</li>
-<li>MyBatis 与 Hibernate 都屏蔽了 JDBC API 的底层访问细节</li>
-<li>Hibernate 是全自动的 ORM 映射工具，可以自动生成 SQL 语句；MyBatis需要在 xml 配置文件中写 SQL 语句</li>
-<li>由于 Hibernate 可以自动生成 SQL 语句，在进行复杂查询时，Hibernate 实现要比 MyBatis 复杂</li>
+<li>Mybatis 在 JDBC 的基础上做了，OO化、封装事务管理接口等，依然要通过 JDBC 完成数据查询、更新等操作</li>
+<li>Mybatis 与 Hibernate 都屏蔽了 JDBC API 的底层访问细节</li>
+<li>Hibernate 是全自动的 ORM 映射工具，可以自动生成 SQL 语句；Mybatis需要在 xml 配置文件中写 SQL 语句</li>
+<li>由于 Hibernate 可以自动生成 SQL 语句，在进行复杂查询时，Hibernate 实现要比 Mybatis 复杂</li>
 </ul>
 </li>
 </ul>
@@ -233,14 +233,14 @@
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/mybatis/">MyBatis</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/mybatis/">Mybatis</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
         </section>
     </div>
 
     <div class="post-nav">
-            <a href="/posts/mybatis2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" class="next" rel="next" title="【MyBatis】2_入门程序">【MyBatis】2_入门程序<i class="fas fa-angle-right fa-fw"></i></a></div>
+            <a href="/posts/mybatis2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" class="next" rel="next" title="【Mybatis】2_入门程序">【Mybatis】2_入门程序<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
