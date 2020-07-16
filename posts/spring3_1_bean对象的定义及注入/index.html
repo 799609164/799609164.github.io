@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【Spring】3_1_Bean对象的定义及注入 - </title><meta name="Description" content=""><meta property="og:title" content="【Spring】3_1_Bean对象的定义及注入" />
+<meta property="og:description" content="Spring 框架 3 Spring IOC 容器 —— Bean 对象的定义及注入 3.1 理论 控制反转（IOC）：IOC 是一种设计思想，指将对象交给容器控制，而非在对象内部中控制 依赖注入（D" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/spring3_1_bean%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9A%E4%B9%89%E5%8F%8A%E6%B3%A8%E5%85%A5/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-06-15T20:44:30+08:00" />
+<meta property="article:modified_time" content="2020-06-15T20:44:30+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【Spring】3_1_Bean对象的定义及注入"/>
+<meta name="twitter:description" content="Spring 框架 3 Spring IOC 容器 —— Bean 对象的定义及注入 3.1 理论 控制反转（IOC）：IOC 是一种设计思想，指将对象交给容器控制，而非在对象内部中控制 依赖注入（D"/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/spring3_1_bean%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9A%E4%B9%89%E5%8F%8A%E6%B3%A8%E5%85%A5/" /><link rel="prev" href="http://example.org/posts/spring2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" /><link rel="next" href="http://example.org/posts/spring3_2_bean%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【Spring】3_1_Bean对象的定义及注入",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/spring3_1_bean%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9A%E4%B9%89%E5%8F%8A%E6%B3%A8%E5%85%A5\/"
+        },"genre": "posts","keywords": "Java, Spring","wordcount":  2601 ,
+        "url": "http:\/\/example.org\/posts\/spring3_1_bean%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9A%E4%B9%89%E5%8F%8A%E6%B3%A8%E5%85%A5\/","datePublished": "2020-06-15T20:44:30+08:00","dateModified": "2020-06-15T20:44:30+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【Spring】3_1_Bean对象的定义及注入</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-15">2020-06-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2601 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#3-spring-ioc-容器--bean-对象的定义及注入">3 Spring IOC 容器 —— Bean 对象的定义及注入</a>
+      <ul>
+        <li><a href="#31-理论">3.1 理论</a></li>
+        <li><a href="#32-bean-的定义及注入-value">3.2 Bean 的定义及注入 Value</a></li>
+        <li><a href="#33-内部嵌套的-bean">3.3 内部嵌套的 Bean</a></li>
+        <li><a href="#34-集合类型的-bean">3.4 集合类型的 Bean</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="spring-框架">Spring 框架</h1>
+<h2 id="3-spring-ioc-容器--bean-对象的定义及注入">3 Spring IOC 容器 —— Bean 对象的定义及注入</h2>
+<h3 id="31-理论">3.1 理论</h3>
+<ul>
+<li>
+<p><strong>控制反转（IOC）</strong>：IOC 是一种设计思想，指将对象交给容器控制，而非在对象内部中控制</p>
+</li>
+<li>
+<p><strong>依赖注入（DI）</strong>：由容器动态的将某个依赖关系注入到组件之中，被注入对象依赖 IOC 容器配置依赖对象</p>
+</li>
+<li>
+<p><strong>IOC容器</strong>：IOC 容器是具有依赖注入功能的容器，IOC 容器负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖</p>
+</li>
+<li>
+<p>传统应用程序都是在类内部主动创建依赖对象，从而导致类与类之间高耦合，难于测试；有了 IOC 容器后，把创建和查找依赖对象的控制权交给了容器，由容器进行注入组合对象；对象与对象之间是松散耦合，即方便测试，又利于功能复用，使得程序的整个体系结构变得更灵</p>
+</li>
+<li>
+<p><strong>BeanFactory 容器获取</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 也可以通过 FileSystemXmlApplicationContext 获取 resource
+</span><span class="c1"></span><span class="n">Resource</span> <span class="n">resource</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathResource</span><span class="o">(</span><span class="s">&#34;classpath.xml&#34;</span><span class="o">);</span>
+<span class="n">BeanFactory</span> <span class="n">beanFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XmlBeanFactory</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="32-bean-的定义及注入-value">3.2 Bean 的定义及注入 Value</h3>
+<ul>
+<li><strong>Bean 的定义方式</strong>
+<ul>
+<li>基于 XML 的配置</li>
+<li>基于注解的配置</li>
+<li>基于 Java 类的配置</li>
+</ul>
+</li>
+<li><strong>Bean 的注入方式</strong>
+<ul>
+<li>基于构造函数的依赖注入</li>
+<li>基于设值函数的依赖注入</li>
+</ul>
+</li>
+</ul>
+<h4 id="321-基于xml的配置">3.2.1 基于XML的配置</h4>
+<ul>
+<li>
+<p><strong>创建项目工程</strong></p>
+<ul>
+<li><code>mvn archetype:generate -DgroupId=com.xxx.spring -DartifactId=bean -DarchetypeArtifactId=maven-archetype-quickstart</code></li>
+</ul>
+</li>
+<li>
+<p><strong>pom.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns =</span> <span class="s">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> 
+         <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://maven.apache.org/POM/4.0.0 
+</span><span class="s">                               http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.xxx.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>bean<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>bean<span class="nt">&lt;/name&gt;</span>
+  
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+        <span class="nt">&lt;maven.compiler.source&gt;</span>1.8<span class="nt">&lt;/maven.compiler.source&gt;</span>
+        <span class="nt">&lt;maven.compiler.target&gt;</span>1.8<span class="nt">&lt;/maven.compiler.target&gt;</span>
+        <span class="nt">&lt;spring.version&gt;</span>5.1.1.RELEASE<span class="nt">&lt;/spring.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+  
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.spring.bean.FileNameGenerator.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.bean</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileNameGenerator</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">type</span><span class="o">;</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+      
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getType</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">type</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setType</span><span class="o">(</span><span class="n">String</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+       <span class="k">this</span><span class="o">.</span><span class="na">type</span> <span class="o">=</span> <span class="n">type</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="cm">/*
+</span><span class="cm">    *打印文件名和文件类型的方法
+</span><span class="cm">    */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printFileName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;FileName &amp; FileType is : &#34;</span><span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#34; &amp; &#34;</span> <span class="o">+</span> <span class="n">type</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>src/main/resources/SpringBeans.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+      
+    <span class="c">&lt;!--一般方法--&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;FileNameGenerator&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.bean.FileNameGenerator&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;value&gt;</span>xxx<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;type&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;value&gt;</span>txt<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+      
+    <span class="c">&lt;!-- 另一重配置方法 缩写方法--&gt;</span>
+    <span class="c">&lt;!--
+</span><span class="c">    &lt;bean id = &#34;FileNameGenerator&#34; class =&#34;com.xxx.spring.bean.FileNameGenerator&#34;&gt;
+</span><span class="c">           &lt;property name = &#34;name&#34; value = &#34;xxx&#34; /&gt;
+</span><span class="c">           &lt;property name = &#34;type&#34; value = &#34;txt&#34; /&gt;
+</span><span class="c">    &lt;/bean&gt;
+</span><span class="c">     --&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- pschema 方法 --&gt;</span>
+<span class="c">&lt;!-- 额外声明xmlns:p --&gt;</span>
+<span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+    <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+    <span class="na">xmlns:p =</span> <span class="s">&#34;http://www.springframework.org/schema/p&#34;</span>
+    <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                          http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+      
+    <span class="c">&lt;!-- 一般方法 --&gt;</span>
+    <span class="c">&lt;!-- 
+</span><span class="c">  &lt;bean id = &#34;FileNameGenerator&#34; class = &#34;com.xxx.spring.bean.FileNameGenerator&#34;&gt;
+</span><span class="c">        &lt;property name = &#34;name&#34;&gt;
+</span><span class="c">            &lt;value&gt;xxx&lt;/value&gt;
+</span><span class="c">        &lt;/property&gt;
+</span><span class="c">        &lt;property name = &#34;type&#34;&gt;
+</span><span class="c">            &lt;value&gt;txt&lt;/value&gt;
+</span><span class="c">        &lt;/property&gt;
+</span><span class="c">    &lt;/bean&gt;
+</span><span class="c">  --&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;FileNameGenerator&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.bean.FileNameGenerator&#34;</span>
+             <span class="na">p:name =</span> <span class="s">&#34;xxx&#34;</span> <span class="na">p:type =</span> <span class="s">&#34;txt&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.spring.bean.App.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.bean</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">com.xxx.spring.bean.FileNameGenerator</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">;</span>
+      
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span> <span class="n">String</span><span class="o">[]</span> <span class="n">args</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&#34;SpringBeans.xml&#34;</span><span class="o">);</span>
+  
+        <span class="n">FileNameGenerator</span> <span class="n">obj</span> <span class="o">=</span> <span class="o">(</span><span class="n">FileNameGenerator</span><span class="o">)</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;FileNameGenerator&#34;</span><span class="o">);</span>
+        <span class="n">obj</span><span class="o">.</span><span class="na">printFileName</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>编译运行</strong></p>
+<ul>
+<li><code>mvn compile</code></li>
+<li><code>mvn exec:java -Dexec.mainClass=&quot;com.xxx.spring.bean.App&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="322-基于注解的配置">3.2.2 基于注解的配置</h4>
+<ul>
+<li>
+<p>采用注解配置，Bean 定义在 Bean 实现类上注解就可以实现</p>
+</li>
+<li>
+<p><strong>@Component</strong></p>
+<ul>
+<li>自动生成 Bean 定义</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 等价 XML 中 &lt;bean id = &#34;xxx&#34; class = &#34;com.xxx.spring.xxx&#34;&gt;
+</span><span class="c1"></span><span class="n">packeage</span> <span class="n">com</span><span class="o">.</span><span class="na">xxx</span><span class="o">.</span><span class="na">spring</span><span class="o">;</span>
+  
+<span class="nd">@Component</span><span class="o">(</span><span class="s">&#34;xxx&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">xxx</span> <span class="o">{</span>
+  
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>与 @Component 等效的注解
+<ul>
+<li>@Controller：对应表现层的 Bean，也就是 Action</li>
+<li>@Service：对应的是业务层 Bean</li>
+<li>@Repository：对应数据访问层 Bean</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>@Autowired</strong></p>
+<ul>
+<li>自动装配 bean，默认情况下要求依赖对象必须存在</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 需在 applicationContext.xml 中加入：
+</span><span class="c1">// &lt;bean class = &#34;org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor&#34; /&gt;
+</span><span class="c1">// 如果要允许 null 值，可以设置它的 required 属性为 false
+</span><span class="c1"></span>  
+<span class="nd">@Autowired</span><span class="o">()</span>
+<span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&#34;xxxDao&#34;</span><span class="o">)</span>
+<span class="kd">private</span> <span class="n">xxxDao</span> <span class="n">xxxDao</span><span class="o">;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>@Configuration</strong></p>
+<ul>
+<li>修饰的类是 Spring 的核心配置文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.java_config</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+  
+<span class="c1">// 相当于在 ApplicationContext.xml 中添加了
+</span><span class="c1">// &lt;bean id = &#34;animal&#34; class = &#34;com.xxx.spring.java_config.Dog&#34;&gt;
+</span><span class="c1"></span><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppConfig</span> <span class="o">{</span>
+    <span class="nd">@Bean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;animal&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">IAnimal</span> <span class="nf">getAnimal</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">Dog</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>App.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.java_config</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.AnnotationConfigApplicationContext</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">;</span>
+  
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnnotationConfigApplicationContext</span><span class="o">(</span><span class="n">AppConfig</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          
+        <span class="n">IAnimal</span> <span class="n">obj</span> <span class="o">=</span> <span class="o">(</span><span class="n">IAnimal</span><span class="o">)</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;animal&#34;</span><span class="o">);</span>
+        <span class="n">obj</span><span class="o">.</span><span class="na">makeSound</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="33-内部嵌套的-bean">3.3 内部嵌套的 Bean</h3>
+<ul>
+<li>
+<p>在一个 Bean 中嵌套了另一个 Bean，支持属性（property）注入和构造函数（constructor-arg）注入</p>
+</li>
+<li>
+<p><strong>com.xxx.spring.innerbean.Person.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.innerbean</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">address</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getAddress</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">address</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAddress</span><span class="o">(</span><span class="n">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;Person [address=&#34;</span> <span class="o">+</span> <span class="n">address</span> <span class="o">+</span> <span class="s">&#34;, age=&#34;</span> <span class="o">+</span> <span class="n">age</span> <span class="o">+</span> <span class="s">&#34;, name=&#34;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#34;]&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.spring.innerbean.Customer.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.innerbean</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Customer</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Person</span> <span class="n">person</span><span class="o">;</span>
+          
+    <span class="c1">// 带参构造方法
+</span><span class="c1"></span>    <span class="kd">public</span> <span class="nf">Customer</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="c1">// 有带参构造方法一定要有默认构造方法
+</span><span class="c1"></span>    <span class="kd">public</span> <span class="nf">Customer</span><span class="o">()</span> <span class="o">{}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPerson</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;Customer [person=&#34;</span> <span class="o">+</span> <span class="n">person</span> <span class="o">+</span> <span class="s">&#34;]&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>src/main/resources/SpringBeans.xml</strong></p>
+<ul>
+<li>
+<p><strong>方法1</strong>：在 Customer 中，可以用 <code>ref</code> 属性引用 Person 的 Bean</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 使用 ref 引用 Person 的情况，Person 则不会被别的 Bean 引用 --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;CustomerBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Customer&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;person&#34;</span> <span class="na">ref =</span> <span class="s">&#34;PersonBean&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+    
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;PersonBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Person&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;address&#34;</span> <span class="na">value =</span> <span class="s">&#34;chengdu&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;age&#34;</span> <span class="na">value =</span> <span class="s">&#34;25&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>方法2</strong>：在 Customer 的 Bean 中声明一个内部 Bean</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;CustomerBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Customer&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;person&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Person&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;address&#34;</span> <span class="na">value =</span> <span class="s">&#34;chengdu&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;age&#34;</span> <span class="na">value =</span> <span class="s">&#34;25&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>方法3</strong>： 通过构造函数注入内部 Bean</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;CustomerBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Customer&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;constructor-arg&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Person&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;address&#34;</span> <span class="na">value =</span> <span class="s">&#34;chengdu&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;age&#34;</span> <span class="na">value =</span> <span class="s">&#34;25&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/constructor-arg&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+<li>
+<p><strong>App.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.innerbean</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">com.xxx.spring.innerbean.Customer</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">;</span>
+  
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span> <span class="n">String</span><span class="o">[]</span> <span class="n">args</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&#34;SpringBeans.xml&#34;</span><span class="o">);</span>
+  
+        <span class="n">Customer</span> <span class="n">obj</span> <span class="o">=</span> <span class="o">(</span><span class="n">Customer</span><span class="o">)</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;CustomerBean&#34;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>编译运行</strong></p>
+<ul>
+<li><code>mvn compile</code></li>
+<li><code>mvn exec:java -Dexec.mainClass=&quot;com.xxx.spring.innerbean.App&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="34-集合类型的-bean">3.4 集合类型的 Bean</h3>
+<ul>
+<li>
+<p><strong>集合类型</strong>：List/Set/Map/Properties</p>
+</li>
+<li>
+<p><strong>com.xxx.spring.collections.Customer.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.collections</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">com.xxx.spring.innerbean.Person</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Customer</span> <span class="o">{</span>
+    <span class="c1">// 这里的 lists 要和 Bean 中 property 标签的 name 一样
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">lists</span><span class="o">;</span> 
+    <span class="kd">private</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">sets</span> <span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">maps</span> <span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Properties</span> <span class="n">pros</span><span class="o">;</span>
+  
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="nf">getLists</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">lists</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setLists</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">lists</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">lists</span> <span class="o">=</span> <span class="n">lists</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="nf">getSets</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">sets</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSets</span><span class="o">(</span><span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">sets</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">sets</span> <span class="o">=</span> <span class="n">sets</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="nf">getMaps</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">maps</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setMaps</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">maps</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">maps</span> <span class="o">=</span> <span class="n">maps</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">Properties</span> <span class="nf">getPros</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">pros</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPros</span><span class="o">(</span><span class="n">Properties</span> <span class="n">pros</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">pros</span> <span class="o">=</span> <span class="n">pros</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="c1">// 不要忘记写内部要引用的 Bean
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="n">Person</span> <span class="n">person</span><span class="o">;</span> 
+  
+    <span class="kd">public</span> <span class="nf">Customer</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="nf">Customer</span><span class="o">(){</span>
+  
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPerson</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;Customer [person=&#34;</span> <span class="o">+</span> <span class="n">person</span> <span class="o">+</span> <span class="s">&#34;]&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>src/main/resources/SpringCollections.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+  
+    <span class="c">&lt;!-- bean的 id 最好首字母小写 --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.collections.Customer&#34;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- java.util.List --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;lists&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;list&gt;</span>
+                <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
+                <span class="c">&lt;!-- List 属性既可以通过 &lt;value&gt; 注入字符串，也可以通过 &lt;ref&gt; 注入容器中其他的 Bean--&gt;</span>
+                <span class="nt">&lt;ref</span> <span class="na">bean =</span> <span class="s">&#34;personBean&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;value&gt;</span>2<span class="nt">&lt;/value&gt;</span>
+                <span class="nt">&lt;bean</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Person&#34;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxxList&#34;</span> <span class="nt">/&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;address&#34;</span> <span class="na">value =</span> <span class="s">&#34;chengdu&#34;</span> <span class="nt">/&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;age&#34;</span> <span class="na">value=</span><span class="s">&#34;25&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;/bean&gt;</span>
+            <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+  
+        <span class="c">&lt;!-- java.util.Set --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;sets&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;set&gt;</span>
+                <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span><span class="c">&lt;!--Set 与 List 类似--&gt;</span>
+                <span class="nt">&lt;ref</span> <span class="na">bean =</span> <span class="s">&#34;personBean&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;bean</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Person&#34;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxxSet&#34;</span> <span class="nt">/&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;address&#34;</span> <span class="na">value =</span> <span class="s">&#34;chengdu&#34;</span> <span class="nt">/&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;age&#34;</span> <span class="na">value =</span> <span class="s">&#34;25&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;/bean&gt;</span>
+            <span class="nt">&lt;/set&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+  
+        <span class="c">&lt;!-- java.util.Map --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;maps&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;map&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key =</span> <span class="s">&#34;Key 1&#34;</span> <span class="na">value =</span> <span class="s">&#34;1&#34;</span> <span class="nt">/&gt;</span>
+                <span class="c">&lt;!--一个 entry 就是一个 Map 元素--&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key =</span> <span class="s">&#34;Key 2&#34;</span> <span class="na">value-ref =</span> <span class="s">&#34;personBean&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key =</span> <span class="s">&#34;Key 3&#34;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;bean</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Person&#34;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxxMap&#34;</span> <span class="nt">/&gt;</span>
+                           <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;address&#34;</span> <span class="na">value =</span> <span class="s">&#34;chengdu&#34;</span> <span class="nt">/&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;age&#34;</span> <span class="na">value =</span> <span class="s">&#34;25&#34;</span> <span class="nt">/&gt;</span>
+                    <span class="nt">&lt;/bean&gt;</span>
+                <span class="nt">&lt;/entry&gt;</span>
+            <span class="nt">&lt;/map&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+  
+        <span class="c">&lt;!-- java.util.Properties --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;pros&#34;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- Properties 类型类似于Map 类型的特例，Map 元素的键值可以对应任何类型的对象，但是Properties只能是字符串--&gt;</span>
+            <span class="nt">&lt;props&gt;</span>
+                <span class="nt">&lt;prop</span> <span class="na">key =</span> <span class="s">&#34;admin&#34;</span><span class="nt">&gt;</span>admin@nospam.com<span class="nt">&lt;/prop&gt;</span>
+                <span class="nt">&lt;prop</span> <span class="na">key =</span> <span class="s">&#34;support&#34;</span><span class="nt">&gt;</span>support@nospam.com<span class="nt">&lt;/prop&gt;</span>
+            <span class="nt">&lt;/props&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;personBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.innerbean.Person&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxxPersonBean&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;address&#34;</span> <span class="na">value =</span> <span class="s">&#34;chengdu&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;age&#34;</span> <span class="na">value =</span> <span class="s">&#34;25&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>App.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.collections</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">;</span>
+  
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span> <span class="n">String</span><span class="o">[]</span> <span class="n">args</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&#34;SpringCollections.xml&#34;</span><span class="o">);</span>
+  
+        <span class="cm">/*
+</span><span class="cm">        * case 1 : List 第1种情况
+</span><span class="cm">        */</span>
+        <span class="n">Customer</span> <span class="n">customer</span> <span class="o">=</span> <span class="o">(</span><span class="n">Customer</span><span class="o">)</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;customerBean&#34;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">customer</span><span class="o">.</span><span class="na">getLists</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+  
+        <span class="cm">/*
+</span><span class="cm">        * case 2 : Set 第2种情况
+</span><span class="cm">        */</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">customer</span><span class="o">.</span><span class="na">getSets</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+  
+        <span class="cm">/*
+</span><span class="cm">        * case 3 : Map 第3种情况
+</span><span class="cm">        */</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">customer</span><span class="o">.</span><span class="na">getMaps</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+  
+        <span class="cm">/*
+</span><span class="cm">        * case 4 : 第4种情况
+</span><span class="cm">        */</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">customer</span><span class="o">.</span><span class="na">getPros</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>编译运行</strong></p>
+<ul>
+<li><code>mvn compile</code></li>
+<li><code>mvn exec:java -Dexec.mainClass=&quot;com.xxx.spring.collections.App&quot;</code></li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-15</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/spring/">Spring</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/spring2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" class="prev" rel="prev" title="【Spring】2_入门程序"><i class="fas fa-angle-left fa-fw"></i>【Spring】2_入门程序</a>
+            <a href="/posts/spring3_2_bean%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="next" rel="next" title="【Spring】3_2_Bean对象的作用域与生命周期">【Spring】3_2_Bean对象的作用域与生命周期<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

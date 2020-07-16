@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【SpringMVC】6_拦截器 - </title><meta name="Description" content=""><meta property="og:title" content="【SpringMVC】6_拦截器" />
+<meta property="og:description" content="Spring MVC 框架 6 拦截器 6.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=InterceptorTest -DarchetypeArtifactId=maven-archetype-webapp 6.2 拦截器原理 拦截器的主要作用是拦截用户的请求并进行相应的处理，如权限验证等：Interceptor 拦" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/springmvc6_%E6%8B%A6%E6%88%AA%E5%99%A8/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-06-30T20:32:32+08:00" />
+<meta property="article:modified_time" content="2020-06-30T20:32:32+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【SpringMVC】6_拦截器"/>
+<meta name="twitter:description" content="Spring MVC 框架 6 拦截器 6.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=InterceptorTest -DarchetypeArtifactId=maven-archetype-webapp 6.2 拦截器原理 拦截器的主要作用是拦截用户的请求并进行相应的处理，如权限验证等：Interceptor 拦"/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/springmvc6_%E6%8B%A6%E6%88%AA%E5%99%A8/" /><link rel="prev" href="http://example.org/posts/springmvc5_%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【SpringMVC】6_拦截器",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/springmvc6_%E6%8B%A6%E6%88%AA%E5%99%A8\/"
+        },"genre": "posts","keywords": "Java, SpringMVC","wordcount":  1463 ,
+        "url": "http:\/\/example.org\/posts\/springmvc6_%E6%8B%A6%E6%88%AA%E5%99%A8\/","datePublished": "2020-06-30T20:32:32+08:00","dateModified": "2020-06-30T20:32:32+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【SpringMVC】6_拦截器</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-30">2020-06-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1463 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#6-拦截器">6 拦截器</a>
+      <ul>
+        <li><a href="#61-创建项目工程">6.1 创建项目工程</a></li>
+        <li><a href="#62-拦截器原理">6.2 拦截器原理</a></li>
+        <li><a href="#63--添加-maven-依赖">6.3  添加 maven 依赖</a></li>
+        <li><a href="#64--配置-webxml">6.4  配置 web.xml</a></li>
+        <li><a href="#65--配置-springmvc-configxml">6.5  配置 springmvc-config.xml</a></li>
+        <li><a href="#66-控制器-controller">6.6 控制器 Controller</a></li>
+        <li><a href="#67-拦截器-interceptor">6.7 拦截器 Interceptor</a></li>
+        <li><a href="#68-jsp-页面">6.8 JSP 页面</a></li>
+        <li><a href="#69-运行测试">6.9 运行测试</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="spring-mvc-框架">Spring MVC 框架</h1>
+<h2 id="6-拦截器">6 拦截器</h2>
+<h3 id="61-创建项目工程">6.1 创建项目工程</h3>
+<ul>
+<li><code>mvn archetype:generate -DgroupId=com.xxx -DartifactId=InterceptorTest -DarchetypeArtifactId=maven-archetype-webapp</code></li>
+</ul>
+<h3 id="62-拦截器原理">6.2 拦截器原理</h3>
+<ul>
+<li>拦截器的主要作用是拦截用户的请求并进行相应的处理，如权限验证等：Interceptor 拦截器拦截请求通过实现 HandlerInterceptor 接口来完成</li>
+<li><strong>HandlerInterceptor 接口中的三个方法</strong>
+<ul>
+<li><code>preHandle()</code>：该方法在请求处理之前被调用。它的返回值是一个 boolean 类型，
+<ul>
+<li>若为 true，则继续调用后面的拦截器和目标方法</li>
+<li>若为 false，则不会调用后面的拦截器和目标方法，表示请求结束</li>
+</ul>
+</li>
+<li><code>postHandle()</code>：该方法只能在当前所属的 Interceptor 的 preHandle 方法返回值为 true 时才能调用
+<ul>
+<li>它在当前请求进行处理之后，即 Controller 方法被调用之后，视图被渲染之前执行</li>
+</ul>
+</li>
+<li><code>afterCompletion()</code>：该方法只能在当前所属的 Interceptor 的 preHandle 方法返回值为 true 时才能调用
+<ul>
+<li>它在整个请求结束之后，即视图被渲染之后执行，其主要作用是进行资源清理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在 Spring MVC 中，一个请求可以添加多个拦截器 Interceptor，每个 Interceptor 的调用会根据声明顺序依次执行；最先执行的是 preHandle 方法，postHandle 方法的被调用的方向和 preHandle 相反</li>
+</ul>
+<h3 id="63--添加-maven-依赖">6.3  添加 maven 依赖</h3>
+<ul>
+<li><strong>pom.xml</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;project</span> <span class="na">xmlns =</span> <span class="s">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> 
+			<span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+			<span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://maven.apache.org/POM/4.0.0 
+</span><span class="s">								http://maven.apache.org/maven-v4_0_0.xsd&#34;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>com.xxx<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>InterceptorTest<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;packaging&gt;</span>war<span class="nt">&lt;/packaging&gt;</span>
+	<span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+	<span class="nt">&lt;name&gt;</span>InterceptorTest Maven Webapp<span class="nt">&lt;/name&gt;</span>
+	<span class="nt">&lt;url&gt;</span>http://maven.apache.org<span class="nt">&lt;/url&gt;</span>
+
+	<span class="nt">&lt;properties&gt;</span>
+		<span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+		<span class="nt">&lt;spring.version&gt;</span>5.1.1.RELEASE<span class="nt">&lt;/spring.version&gt;</span>
+	<span class="nt">&lt;/properties&gt;</span>
+
+	<span class="nt">&lt;dependencies&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-beans<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-context-support<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-jdbc<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-tx<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-webmvc<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>javax.servlet<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>javax.servlet-api<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
+			<span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>javax.servlet.jsp<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>jsp-api<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>javax.servlet<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>jstl<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+	<span class="nt">&lt;/dependencies&gt;</span>
+	
+	<span class="nt">&lt;build&gt;</span>
+		<span class="nt">&lt;plugins&gt;</span>
+			<span class="nt">&lt;plugin&gt;</span>
+				<span class="c">&lt;!--jetty maven 插件，为 maven 提供运行 web 程序的能力--&gt;</span>
+				<span class="nt">&lt;groupId&gt;</span>org.eclipse.jetty<span class="nt">&lt;/groupId&gt;</span>
+				<span class="nt">&lt;artifactId&gt;</span>jetty-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+				<span class="nt">&lt;version&gt;</span>9.4.12.v20180830<span class="nt">&lt;/version&gt;</span>
+				<span class="nt">&lt;configuration&gt;</span>
+					<span class="nt">&lt;scanIntervalSeconds&gt;</span>10<span class="nt">&lt;/scanIntervalSeconds&gt;</span>
+					<span class="nt">&lt;webApp&gt;</span>
+						<span class="nt">&lt;contextPath&gt;</span>/<span class="nt">&lt;/contextPath&gt;</span>
+					<span class="nt">&lt;/webApp&gt;</span>
+				<span class="nt">&lt;/configuration&gt;</span>
+			<span class="nt">&lt;/plugin&gt;</span>
+		<span class="nt">&lt;/plugins&gt;</span>
+	<span class="nt">&lt;/build&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="64--配置-webxml">6.4  配置 web.xml</h3>
+<ul>
+<li><strong>web.xml</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+			<span class="na">xmlns =</span> <span class="s">&#34;http://java.sun.com/xml/ns/javaee&#34;</span> 
+			<span class="na">xmlns:web =</span> <span class="s">&#34;http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&#34;</span>
+			<span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://java.sun.com/xml/ns/javaee 
+</span><span class="s">								http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&#34;</span>
+			<span class="na">id =</span> <span class="s">&#34;WebApp_ID&#34;</span> <span class="na">version =</span> <span class="s">&#34;3.0&#34;</span><span class="nt">&gt;</span>
+	
+	<span class="nt">&lt;display-name&gt;</span>InterceptorTest<span class="nt">&lt;/display-name&gt;</span>
+	<span class="nt">&lt;servlet&gt;</span>
+		<span class="nt">&lt;servlet-name&gt;</span>springmvc<span class="nt">&lt;/servlet-name&gt;</span>
+		<span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+		<span class="nt">&lt;init-param&gt;</span>
+			<span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+			<span class="nt">&lt;param-value&gt;</span>/WEB-INF/springmvc-config.xml<span class="nt">&lt;/param-value&gt;</span>
+		<span class="nt">&lt;/init-param&gt;</span>
+		<span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+	<span class="nt">&lt;/servlet&gt;</span>
+	
+	<span class="nt">&lt;servlet-mapping&gt;</span>
+		<span class="nt">&lt;servlet-name&gt;</span>springmvc<span class="nt">&lt;/servlet-name&gt;</span>
+		<span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
+	<span class="nt">&lt;/servlet-mapping&gt;</span>
+<span class="nt">&lt;/web-app&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="65--配置-springmvc-configxml">6.5  配置 springmvc-config.xml</h3>
+<ul>
+<li><strong>webapp/WEB-INF/springmvc-config.xml</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+		<span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span> 
+		<span class="na">xmlns:context =</span> <span class="s">&#34;http://www.springframework.org/schema/context&#34;</span>
+		<span class="na">xmlns:mvc =</span> <span class="s">&#34;http://www.springframework.org/schema/mvc&#34;</span>
+		<span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">								http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+</span><span class="s">								http://www.springframework.org/schema/context
+</span><span class="s">								http://www.springframework.org/schema/context/spring-context-4.2.xsd
+</span><span class="s">								http://www.springframework.org/schema/mvc
+</span><span class="s">								http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd&#34;</span><span class="nt">&gt;</span>
+	
+	<span class="nt">&lt;mvc:annotation-driven</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;context:annotation-config</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;context:component-scan</span> <span class="na">base-package =</span> <span class="s">&#34;com.xxx.controller&#34;</span> <span class="nt">/&gt;</span>
+	
+	<span class="nt">&lt;bean</span>
+		<span class="na">class =</span> <span class="s">&#34;org.springframework.web.servlet.view.InternalResourceViewResolver&#34;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;prefix&#34;</span> <span class="na">value =</span> <span class="s">&#34;/WEB-INF/views/&#34;</span><span class="nt">&gt;&lt;/property&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;suffix&#34;</span> <span class="na">value =</span> <span class="s">&#34;.jsp&#34;</span><span class="nt">&gt;&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	<span class="c">&lt;!-- 配置拦截器 --&gt;</span>
+	<span class="nt">&lt;mvc:interceptors&gt;</span>
+		<span class="nt">&lt;mvc:interceptor&gt;</span>
+			<span class="c">&lt;!-- 拦截所有请求 --&gt;</span>
+			<span class="nt">&lt;mvc:mapping</span> <span class="na">path =</span> <span class="s">&#34;/*&#34;</span> <span class="nt">/&gt;</span>
+			<span class="c">&lt;!-- 该类是我们自定义的Interceptor --&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.interceptor.LoginInterceptor&#34;</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/mvc:interceptor&gt;</span>
+	<span class="nt">&lt;/mvc:interceptors&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="66-控制器-controller">6.6 控制器 Controller</h3>
+<ul>
+<li><strong>com.xxx.controller.LoginController.java</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.controller</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpSession</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.ui.Model</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+
+<span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoginController</span> <span class="o">{</span>
+	<span class="c1">// 登录
+</span><span class="c1"></span>	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/login&#34;</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">login</span><span class="o">(</span><span class="n">HttpSession</span> <span class="n">session</span><span class="o">,</span> <span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">,</span>
+			<span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// 判断用户名和密码是否正确
+</span><span class="c1"></span>		<span class="c1">// 用户名为 &#34;xxx&#34;，密码为 &#34;123456&#34;
+</span><span class="c1"></span>		<span class="k">if</span> <span class="o">(</span><span class="n">username</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&#34;xxx&#34;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">password</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&#34;123456&#34;</span><span class="o">))</span> <span class="o">{</span>
+			<span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">,</span> <span class="n">username</span><span class="o">);</span>
+			<span class="c1">// 重定向到 test 请求
+</span><span class="c1"></span>			<span class="k">return</span> <span class="s">&#34;redirect:test&#34;</span><span class="o">;</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">&#34;message&#34;</span><span class="o">,</span> <span class="s">&#34;wrong user name or password!&#34;</span><span class="o">);</span>
+			<span class="k">return</span> <span class="s">&#34;loginform&#34;</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="c1">// 登出
+</span><span class="c1"></span>	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/loginout&#34;</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">loginout</span><span class="o">(</span><span class="n">HttpSession</span> <span class="n">session</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="n">session</span><span class="o">.</span><span class="na">invalidate</span><span class="o">();</span>
+		<span class="k">return</span> <span class="s">&#34;loginform&#34;</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>com.xxx.controller.TestController.java</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.controller</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.ui.Model</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+
+<span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
+	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/test&#34;</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">test</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+		<span class="k">return</span> <span class="s">&#34;success&#34;</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="67-拦截器-interceptor">6.7 拦截器 Interceptor</h3>
+<ul>
+<li><strong>com.xxx.interceptor.LoginInterceptor.java</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.interceptor</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletResponse</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.web.servlet.HandlerInterceptor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.servlet.ModelAndView</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoginInterceptor</span> <span class="kd">implements</span> <span class="n">HandlerInterceptor</span> <span class="o">{</span>
+	<span class="c1">// 不拦截 &#34;/login&#34; 请求
+</span><span class="c1"></span>	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span><span class="o">[]</span> <span class="n">IGNORE_URI</span> <span class="o">=</span> <span class="o">{</span> <span class="s">&#34;/login&#34;</span> <span class="o">};</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterCompletion</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span>
+			<span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">exception</span><span class="o">)</span>
+			<span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;This is afterCompletion!&#34;</span><span class="o">);</span>
+
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">postHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span>
+			<span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">,</span> <span class="n">ModelAndView</span> <span class="n">mv</span><span class="o">)</span>
+			<span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;This is postHandle!&#34;</span><span class="o">);</span>
+
+	<span class="o">}</span>
+
+	<span class="c1">// 该方法将在 Controller 处理前进行调用
+</span><span class="c1"></span>	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span>
+			<span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;This is preHandle!&#34;</span><span class="o">);</span>
+		<span class="c1">// flag 表示是否登录
+</span><span class="c1"></span>		<span class="kt">boolean</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="c1">// 获取请求的 URL
+</span><span class="c1"></span>		<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">();</span>
+		<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">s</span> <span class="o">:</span> <span class="n">IGNORE_URI</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">url</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">s</span><span class="o">))</span> <span class="o">{</span>
+				<span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+				<span class="k">break</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">if</span> <span class="o">(!</span><span class="n">flag</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// 获取 Session 并判断是否登录
+</span><span class="c1"></span>			<span class="n">String</span> <span class="n">username</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">().</span><span class="na">getAttribute</span><span class="o">(</span>
+					<span class="s">&#34;username&#34;</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">username</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&#34;message&#34;</span><span class="o">,</span> <span class="s">&#34;Please log in first!&#34;</span><span class="o">);</span>
+				<span class="c1">// 如果未登录，进行拦截，跳转到登录界面
+</span><span class="c1"></span>				<span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&#34;/WEB-INF/views/loginform.jsp&#34;</span><span class="o">)</span>
+						<span class="o">.</span><span class="na">forward</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+				<span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">flag</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="68-jsp-页面">6.8 JSP 页面</h3>
+<ul>
+<li><strong>webapp/WEB-INF/views/loginform.jsp</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="err">&lt;</span>%@ page language = &#34;java&#34; contentType = &#34;text/html; charset = UTF-8&#34;
+	pageEncoding = &#34;UTF-8&#34;%&gt;
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv </span><span class="o">=</span> <span class="s">&#34;Content-Type&#34;</span> <span class="na">content </span><span class="o">=</span> <span class="s">&#34;text/html; charset = UTF-8&#34;</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>login page<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+	
+	<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">h4</span><span class="p">&gt;</span>login page<span class="p">&lt;/</span><span class="nt">h4</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">form</span> <span class="na">action </span><span class="o">=</span> <span class="s">&#34;login&#34;</span> <span class="na">method </span><span class="o">=</span> <span class="s">&#34;post&#34;</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">font</span> <span class="na">color </span><span class="o">=</span> <span class="s">&#34;red&#34;</span><span class="p">&gt;</span>${requestScope.message}<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
+				<span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+					<span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>name:<span class="p">&lt;</span><span class="nt">input</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;text&#34;</span> <span class="na">name </span><span class="o">=</span> <span class="s">&#34;username&#34;</span> <span class="p">/&gt;</span>
+				<span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+				<span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+					<span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>password:<span class="p">&lt;</span><span class="nt">input</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;password&#34;</span> <span class="na">name </span><span class="o">=</span> <span class="s">&#34;password&#34;</span> <span class="p">/&gt;</span>
+				<span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+				<span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+					<span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;submit&#34;</span> <span class="na">value </span><span class="o">=</span> <span class="s">&#34;login&#34;</span> <span class="p">/&gt;</span>
+				<span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+			<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+		<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>webapp/WEB-INF/views/success.jsp</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-html" data-lang="html"><span class="err">&lt;</span>%@ page language = &#34;java&#34; contentType = &#34;text/html; charset = UTF-8&#34;
+	pageEncoding = &#34;UTF-8&#34;%&gt;
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv </span><span class="o">=</span> <span class="s">&#34;Content-Type&#34;</span> <span class="na">content </span><span class="o">=</span> <span class="s">&#34;text/html; charset = UTF-8&#34;</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>success page<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+	
+	<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+		welcome,${sessionScope.username},
+		<span class="p">&lt;</span><span class="nt">a</span> <span class="na">href </span><span class="o">=</span> <span class="s">&#34;loginout&#34;</span><span class="p">&gt;</span>sign out<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="69-运行测试">6.9 运行测试</h3>
+<ul>
+<li>
+<p><code>mvn jetty:run</code></p>
+</li>
+<li>
+<p><strong>结果</strong></p>
+<ul>
+<li>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_1_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png"
+        data-srcset="https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_1_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png, https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_1_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png 1.5x, https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_1_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_1_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png"
+        title="https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_1_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png" /></p>
+</li>
+<li>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_2_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png"
+        data-srcset="https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_2_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png, https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_2_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png 1.5x, https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_2_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_2_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png"
+        title="https://gitee.com/qichuan88/Pictures/raw/master/SpringMVC/6_2_%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%9C%E5%9B%BE.png" /></p>
+</li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-30</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/springmvc/">SpringMVC</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/springmvc5_%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/" class="prev" rel="prev" title="【SpringMVC】5_文件上传和下载"><i class="fas fa-angle-left fa-fw"></i>【SpringMVC】5_文件上传和下载</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

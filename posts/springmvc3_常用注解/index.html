@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【SpringMVC】3_常用注解 - </title><meta name="Description" content=""><meta property="og:title" content="【SpringMVC】3_常用注解" />
+<meta property="og:description" content="Spring MVC 框架 3 常用注解 3.1 @Controller 控制器 Controller 负责处理由 DispatcherServlet 分发的请求，把用户请求的数据经过业务处理层处理后封装成一个 Model，再把 Model 返回给对应的 View 进行展示" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/springmvc3_%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-06-26T19:38:58+08:00" />
+<meta property="article:modified_time" content="2020-06-26T19:38:58+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【SpringMVC】3_常用注解"/>
+<meta name="twitter:description" content="Spring MVC 框架 3 常用注解 3.1 @Controller 控制器 Controller 负责处理由 DispatcherServlet 分发的请求，把用户请求的数据经过业务处理层处理后封装成一个 Model，再把 Model 返回给对应的 View 进行展示"/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/springmvc3_%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/" /><link rel="prev" href="http://example.org/posts/springmvc2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" /><link rel="next" href="http://example.org/posts/springmvc4_%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E4%B8%8E%E6%A0%A1%E9%AA%8C/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【SpringMVC】3_常用注解",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/springmvc3_%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3\/"
+        },"genre": "posts","keywords": "Java, SpringMVC","wordcount":  1946 ,
+        "url": "http:\/\/example.org\/posts\/springmvc3_%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3\/","datePublished": "2020-06-26T19:38:58+08:00","dateModified": "2020-06-26T19:38:58+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【SpringMVC】3_常用注解</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-26">2020-06-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1946 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#3-常用注解">3 常用注解</a>
+      <ul>
+        <li><a href="#31-controller">3.1 @Controller</a></li>
+        <li><a href="#32--requestmapping">3.2 @ RequestMapping</a></li>
+        <li><a href="#33-参数绑定">3.3 参数绑定</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="spring-mvc-框架">Spring MVC 框架</h1>
+<h2 id="3-常用注解">3 常用注解</h2>
+<h3 id="31-controller">3.1 @Controller</h3>
+<ul>
+<li>
+<p>控制器 Controller 负责处理由 DispatcherServlet 分发的请求，把用户请求的数据经过业务处理层处理后封装成一个 Model，再把 Model 返回给对应的 View 进行展示</p>
+</li>
+<li>
+<p><strong>不使用注解</strong></p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 在 springmvc-config.xml 中添加 Controller 类的 Bean 对象 --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.springmvc.controller.UserController&#34;</span><span class="nt">/&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>使用注解</strong></p>
+<ul>
+<li>使用 @Controller 注解的类不再需要继承特定的基类或实现特定的接口，并且可以同时处理多个请求动作</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 2_入门程序中 com.xxx.springmvc.controller.UserController.java
+</span><span class="c1">// Spring 会使用扫描机制查找所有基于注解的控制器类
+</span><span class="c1"></span><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserController</span> <span class="o">{</span>
+
+	<span class="cm">/**
+</span><span class="cm">		* RequestMapping 用来映射一个请求和请求的方法
+</span><span class="cm">		* value = &#34;/register&#34; 表示请求由 register 方法进行处理
+</span><span class="cm">		*/</span>
+	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/register&#34;</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">Register</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">,</span> <span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">// user:视图层传给控制层的表单对象；model：控制层返回给视图层的对象
+</span><span class="c1"></span>		<span class="c1">// 在 model 中添加一个名为 &#34;user&#34; 的 user 对象
+</span><span class="c1"></span>		<span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">,</span> <span class="n">user</span><span class="o">);</span>
+		<span class="c1">// 返回一个字符串 &#34;success&#34; 作为视图名称
+</span><span class="c1"></span>		<span class="k">return</span> <span class="s">&#34;success&#34;</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="32--requestmapping">3.2 @ RequestMapping</h3>
+<ul>
+<li>用于处理请求地址映射，指示 Spring 用哪个类或方法来处理请求动作；作用在类或方法上</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 当 @RequestMapping 用于类上时，表示类中的所有响应方法都被映射到 value 属性所指示的路径下
+</span><span class="c1">// url=http://localhost:8080/user/register
+</span><span class="c1"></span><span class="nd">@Controller</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/user&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserController</span> <span class="o">{</span>
+	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/register&#34;</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">Register</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="s">&#34;register&#34;</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>常用属性</strong></p>
+<ul>
+<li><strong>value</strong>：指定请求的实际地址，value 属性将 URL 映射到方法上；<strong>如果是唯一的属性，value 属性名可省略</strong></li>
+<li><strong>method</strong>：指定请求的 method 类型，即该方法可以处理的 HTTP 请求方式，如 GET、POST 等；<strong>如果未指定 method，则可以处理任意类型的 HTTP 请求</strong></li>
+<li><strong>consumes</strong>：指定处理请求的提交内容类型（Content-Type），如 application/json, text/html</li>
+<li><strong>produces</strong>：指定返回的内容类型，仅当 request 请求头中的（Accept）类型中包含该指定类型才返回</li>
+<li><strong>params</strong>：指定 request 中必须包含某些参数值，才让该方法处理请求</li>
+<li><strong>headers</strong>：指定 request 中必须包含某些指定的 header 值，才让该方法处理请求</li>
+</ul>
+</li>
+<li>
+<p><strong>请求处理方法的参数类型</strong></p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Register 方法接受一个 Model 类型的参数，每个请求处理方法可以有多个不同类型的参数
+</span><span class="c1"></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/register&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">Register</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">,</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">,</span> <span class="n">user</span><span class="o">);</span>
+	<span class="k">return</span> <span class="s">&#34;success&#34;</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>请求处理方法的返回类型</strong></p>
+<ul>
+<li>
+<p><strong>Model</strong></p>
+<ul>
+<li>Spring MVC 内部使用 Model 接口存储模型数据，功能类似于 Java 中的 Map，而 ModelMap 接口是实现了 Model 接口；因此，Model 和 ModelMap 的用法相近</li>
+</ul>
+</li>
+<li>
+<p><strong>ModelAndView</strong></p>
+<ul>
+<li>既包含模型数据信息又包含视图信息，Spring MVC 将包含的视图对模型数据进行渲染，模型数据可以看做 Java 中的 Map</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 1. Model
+</span><span class="c1"></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/register&#34;</span><span class="o">)</span>
+<span class="c1">// 可以将参数中的 Model model 改为 ModelMap modelMap
+</span><span class="c1"></span><span class="kd">public</span> <span class="n">String</span> <span class="nf">Register</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">,</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+	<span class="c1">// jsp 页面传入的 form 表单
+</span><span class="c1"></span>	<span class="c1">// 将 User 对象添加到 Model 中
+</span><span class="c1"></span>	<span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">,</span> <span class="n">user</span><span class="o">);</span>
+	<span class="k">return</span> <span class="s">&#34;success&#34;</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 2. ModelAndView
+</span><span class="c1"></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/register&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">Register</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">,</span><span class="n">ModelAndView</span> <span class="n">mv</span><span class="o">)</span> <span class="o">{</span>
+	<span class="c1">// jsp 页面传入的 form 表单
+</span><span class="c1"></span>	<span class="c1">// 将 User 对象添加到 ModelAndView 的 Model 中
+</span><span class="c1"></span>	<span class="n">mv</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">,</span> <span class="n">user</span><span class="o">);</span>
+	<span class="c1">// 设置返回视图的名称
+</span><span class="c1"></span>	<span class="n">mv</span><span class="o">.</span><span class="na">setViewName</span><span class="o">(</span><span class="s">&#34;success&#34;</span><span class="o">);</span>
+	<span class="k">return</span> <span class="n">mv</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="33-参数绑定">3.3 参数绑定</h3>
+<ul>
+<li>
+<p><strong>@RequestParam</strong></p>
+<ul>
+<li>用于在 Spring MVC 后台控制层获取参数，类似一种是 <code>request.getParameter(&quot;name&quot;)</code></li>
+<li><strong>name</strong>：指定请求头绑定的名称</li>
+<li><strong>value</strong>：name 的别名</li>
+<li><strong>required</strong>：通过 boolean 指定参数是否必须绑定</li>
+<li><strong>defaultValue</strong>：设置默认值</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 请求为：http://localhost:8080/login?username=tom&amp;password=123456
+</span><span class="c1">// 把 username 参数的值 &#34;tom&#34; 赋给 username 变量，把 password 参数的值 &#34;123456&#34; 赋给 password 变量
+</span><span class="c1"></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/login&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">login</span><span class="o">(</span>
+	<span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&#34;password&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+
+	<span class="k">return</span> <span class="o">...</span>
+	<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>@ResponseBody</strong></p>
+<ul>
+<li>用于将 Controller 方法返回的对象，通过适当的 HttpMessageConverter 转换为指定格式后，写入到 Response 对象的 body 数据区</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/something&#34;</span><span class="o">)</span>
+<span class="nd">@ResponseBody</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">doSomething</span><span class="o">(</span><span class="n">String</span> <span class="n">body</span><span class="o">){</span>
+	<span class="k">return</span> <span class="n">body</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>@PathVariable</strong></p>
+<ul>
+<li>用于将请求 URL 中的模板变量映射到功能处理方法的参数上</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 假设请求的 URL 为 &#34;http://localhost:8080/something/1&#34;，
+</span><span class="c1">// 则将 {userId} 为 1 绑定到 @PathVariable 注解的同名参数上
+</span><span class="c1"></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/something/{userId}&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">doSomething</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">userId</span><span class="o">){}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>@RequestHeader</strong></p>
+<ul>
+<li>用于将请求的 header 部分的值映射到方法的参数上</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">// 请求头
+Host                    localhost:8080
+Accept                  text/html,application/xhtml+xml,application/xml;q = 0.9
+Accept-Language         fr,en-gb;q = 0.7,en;q = 0.3
+Accept-Encoding         gzip,deflate
+Accept-Charset          ISO-8859-1,utf-8;q = 0.7,*;q = 0.7
+Keep-Alive              300
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 把请求 header 部分的 Accept-Encoding 的值绑定到参数 encoding 上
+</span><span class="c1">// 把 Keep-Alive 的值绑定到参数 keepAlive 上
+</span><span class="c1"></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/headerTest&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">headerTest</span><span class="o">(</span>
+	<span class="nd">@RequestHeader</span><span class="o">(</span><span class="s">&#34;Accept-Encoding&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">encoding</span><span class="o">,</span> <span class="nd">@RequestHeader</span><span class="o">(</span><span class="s">&#34;Keep-Alive&#34;</span><span class="o">)</span> <span class="kt">long</span> <span class="n">keepAlive</span><span class="o">){</span>
+	<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>@SessionAttributes</strong></p>
+<ul>
+<li>允许有选择地指定 Model 中的哪些属性需要转存到 HttpSession 对象中；只能用于类上，不能用于方法上</li>
+<li><strong>names</strong>：Model 中属性的名称</li>
+</ul>
+<ul>
+<li><strong>value</strong>：names 的别名</li>
+<li><strong>types</strong>：指定放入 HttpSession 当中的对象类型</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 在 success.jsp 中的 body 添加代码，访问 HttpSession 中的 user 对象：${sessionScope.user.username}
+</span><span class="c1">// 然后访问 URL http://loaclhost:8080/，填写信息后点击注册，能够访问到转存到 HttpSeesion 中的 user 对象
+</span><span class="c1"></span><span class="nd">@Controller</span>
+<span class="nd">@SessionAttributes</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;user&#34;</span><span class="o">,</span><span class="n">types</span> <span class="o">=</span> <span class="o">{</span><span class="n">User</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionAttributesTest</span> <span class="o">{</span>
+	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/register&#34;</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">register</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">,</span> <span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">,</span> <span class="n">user</span><span class="o">);</span>
+		<span class="k">return</span> <span class="s">&#34;success&#34;</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>@ModelAttribute</strong></p>
+<ul>
+<li>将请求参数绑定到 Model 对象；可用于方法和 Controller 方法参数上</li>
+<li>注解在方法上时，该方法会在 Controller 每个方法执行前被执行</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ModelAttributeController</span> <span class="o">{</span>
+	
+	<span class="c1">// 注解 @ModelAttribute(&#34;user&#34;)，表示 userModel 方法会先于 login 方法调用
+</span><span class="c1"></span>	<span class="c1">// model 属性名称是 value 指 &#34;user&#34;，model 属性对象是方法的返回值
+</span><span class="c1"></span>	<span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">User</span> <span class="nf">userModel</span><span class="o">(</span>
+		<span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&#34;username&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&#34;password&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">password</span><span class="o">){</span>
+
+		<span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">();</span>
+		<span class="n">user</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+		<span class="n">user</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">password</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">user</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="c1">// @ModelAttribute(&#34;user&#34;)，表示参数 user 的值是 userModel 方法中的 model 属性
+</span><span class="c1"></span>	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&#34;/login&#34;</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">login</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">)</span> <span class="n">User</span> <span class="n">user</span><span class="o">{</span>
+		<span class="k">return</span> <span class="s">&#34;success&#34;</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-26</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/springmvc/">SpringMVC</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/springmvc2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/" class="prev" rel="prev" title="【SpringMVC】2_入门程序"><i class="fas fa-angle-left fa-fw"></i>【SpringMVC】2_入门程序</a>
+            <a href="/posts/springmvc4_%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E4%B8%8E%E6%A0%A1%E9%AA%8C/" class="next" rel="next" title="【SpringMVC】4_数据绑定与校验">【SpringMVC】4_数据绑定与校验<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

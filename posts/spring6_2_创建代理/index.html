@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【Spring】6_2_创建代理 - </title><meta name="Description" content=""><meta property="og:title" content="【Spring】6_2_创建代理" />
+<meta property="og:description" content="Spring 框架 6 Spring AOP —— 创建代理 6.4 使用 BeanNameAutoProxyCreator 自动创建 proxy 手工创建 ProxyFactoryBean 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 &lt;beans xmlns = &#34;http://www.springframework.org/schema/beans&#34; xmlns:xsi = &#34;http://www.w3.org/2001/XMLSchema-instance&#34; xsi:schemaLocation = &#34;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&#34;&gt; &lt;bean id = &#34;customerService&#34; class =" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/spring6_2_%E5%88%9B%E5%BB%BA%E4%BB%A3%E7%90%86/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-06-20T21:17:06+08:00" />
+<meta property="article:modified_time" content="2020-06-20T21:17:06+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【Spring】6_2_创建代理"/>
+<meta name="twitter:description" content="Spring 框架 6 Spring AOP —— 创建代理 6.4 使用 BeanNameAutoProxyCreator 自动创建 proxy 手工创建 ProxyFactoryBean 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 &lt;beans xmlns = &#34;http://www.springframework.org/schema/beans&#34; xmlns:xsi = &#34;http://www.w3.org/2001/XMLSchema-instance&#34; xsi:schemaLocation = &#34;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&#34;&gt; &lt;bean id = &#34;customerService&#34; class ="/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/spring6_2_%E5%88%9B%E5%BB%BA%E4%BB%A3%E7%90%86/" /><link rel="prev" href="http://example.org/posts/spring6_1_%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/" /><link rel="next" href="http://example.org/posts/spring7_jdbc%E6%A8%A1%E6%9D%BF/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【Spring】6_2_创建代理",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/spring6_2_%E5%88%9B%E5%BB%BA%E4%BB%A3%E7%90%86\/"
+        },"genre": "posts","keywords": "Java, Spring","wordcount":  1983 ,
+        "url": "http:\/\/example.org\/posts\/spring6_2_%E5%88%9B%E5%BB%BA%E4%BB%A3%E7%90%86\/","datePublished": "2020-06-20T21:17:06+08:00","dateModified": "2020-06-20T21:17:06+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【Spring】6_2_创建代理</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-20">2020-06-20</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1983 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#6-spring-aop--创建代理">6 Spring AOP —— 创建代理</a>
+      <ul>
+        <li><a href="#64-使用-beannameautoproxycreator-自动创建-proxy">6.4 使用 BeanNameAutoProxyCreator 自动创建 proxy</a></li>
+        <li><a href="#65-使用-defaultadvisorautoproxycreator-创建-proxy">6.5 使用 DefaultAdvisorAutoProxyCreator 创建 proxy</a></li>
+        <li><a href="#66-使用-aspectj-框架实现-spring-aop">6.6 使用 AspectJ 框架实现 Spring AOP</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="spring-框架">Spring 框架</h1>
+<h2 id="6-spring-aop--创建代理">6 Spring AOP —— 创建代理</h2>
+<h3 id="64-使用-beannameautoproxycreator-自动创建-proxy">6.4 使用 BeanNameAutoProxyCreator 自动创建 proxy</h3>
+<ul>
+<li>
+<p><strong>手工创建 ProxyFactoryBean</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span> 
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.advice.CustomerService&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;url&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx.com&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;hijackAroundMethodBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.advice.HijackAroundMethod&#34;</span> <span class="nt">/&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerServiceProxy&#34;</span>
+        <span class="na">class =</span> <span class="s">&#34;org.springframework.aop.framework.ProxyFactoryBean&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;target&#34;</span> <span class="na">ref =</span> <span class="s">&#34;customerService&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;interceptorNames&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;list&gt;</span>
+                <span class="nt">&lt;value&gt;</span>customerAdvisor<span class="nt">&lt;/value&gt;</span>
+            <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerAdvisor&#34;</span> <span class="na">class =</span> <span class="s">&#34;org.springframework.aop.support.NameMatchMethodPointcutAdvisor&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;mappedName&#34;</span> <span class="na">value =</span> <span class="s">&#34;printName&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;advice&#34;</span> <span class="na">ref =</span> <span class="s">&#34; hijackAroundMethodBean &#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 得到 customerServiceProxy 对象
+</span><span class="c1"></span><span class="n">CustomerService</span> <span class="n">cust</span> <span class="o">=</span> <span class="o">(</span><span class="n">CustomerService</span><span class="o">)</span> <span class="n">appContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;customerServiceProxy&#34;</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>自动创建 ProxyFactoryBean</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.advice.CustomerService&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;url&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx.com&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;hijackAroundMethodBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.advice.HijackAroundMethod&#34;</span> <span class="nt">/&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">class =</span> <span class="s">&#34;org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;beanNames&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;list&gt;</span>
+                <span class="nt">&lt;value&gt;</span>*Service<span class="nt">&lt;/value&gt;</span>
+            <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;interceptorNames&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;list&gt;</span>
+                <span class="nt">&lt;value&gt;</span>customerAdvisor<span class="nt">&lt;/value&gt;</span>
+            <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerAdvisor&#34;</span> <span class="na">class =</span> <span class="s">&#34;org.springframework.aop.support.NameMatchMethodPointcutAdvisor&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;mappedName&#34;</span> <span class="na">value =</span> <span class="s">&#34;printName&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;advice&#34;</span> <span class="na">ref =</span> <span class="s">&#34;hijackAroundMethodBean&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java">  <span class="c1">// 只要 bean 的 id 符合 *Service，就会自动创建 proxy，所以，可以用以下代码获得 proxy
+</span><span class="c1"></span>  <span class="n">CustomerService</span> <span class="n">cust</span> <span class="o">=</span> <span class="o">(</span><span class="n">CustomerService</span><span class="o">)</span> <span class="n">appContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;customerService&#34;</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="65-使用-defaultadvisorautoproxycreator-创建-proxy">6.5 使用 DefaultAdvisorAutoProxyCreator 创建 proxy</h3>
+<ul>
+<li>
+<p><strong>慎用</strong>：这种方式利用 DefaultAdvisorAutoProxyCreator 实现自动创建 Proxy，任何匹配 Advisor 的 bean，都会自动创建 Proxy 实现 AOP</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.advice.CustomerService&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;name&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name  =</span><span class="s">&#34;url&#34;</span> <span class="na">value =</span> <span class="s">&#34;xxx.com&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;hijackAroundMethodBean&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.advice.HijackAroundMethod&#34;</span> <span class="nt">/&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerAdvisor&#34;</span>
+        <span class="na">class =</span> <span class="s">&#34;org.springframework.aop.support.NameMatchMethodPointcutAdvisor&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;mappedName&#34;</span> <span class="na">value =</span> <span class="s">&#34;printName&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;advice&#34;</span> <span class="na">ref =</span> <span class="s">&#34;hijackAroundMethodBean&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  
+    <span class="nt">&lt;bean</span>
+        <span class="na">class =</span> <span class="s">&#34;org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// xml 中任何 bean，只要有方法名字为 printName，都会自动创建 Proxy，来支持 AOP
+</span><span class="c1"></span><span class="n">CustomerService</span> <span class="n">cust</span> <span class="o">=</span> <span class="o">(</span><span class="n">CustomerService</span><span class="o">)</span> <span class="n">appContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;customerService&#34;</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="66-使用-aspectj-框架实现-spring-aop">6.6 使用 AspectJ 框架实现 Spring AOP</h3>
+<ul>
+<li>
+<p>基于注释（Annotation），需要 JDK5.0 以上的支持</p>
+</li>
+<li>
+<p><strong>AspectJ 支持的注解类型</strong></p>
+<ul>
+<li>@Before</li>
+<li>@After</li>
+<li>@AfterReturning</li>
+<li>@AfterThrowing</li>
+<li>@Around</li>
+</ul>
+</li>
+<li>
+<p><strong>com.xxx.spring.aop.aspectj.ICustomerBo.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.aop.aspectj</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ICustomerBo</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">addCustomer</span><span class="o">();</span>
+      
+    <span class="kt">void</span> <span class="nf">deleteCustomer</span><span class="o">();</span>
+      
+    <span class="n">String</span> <span class="nf">AddCustomerReturnValue</span><span class="o">();</span>
+      
+    <span class="kt">void</span> <span class="nf">addCustomerThrowException</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span>
+      
+    <span class="kt">void</span> <span class="nf">addCustomerAround</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.spring.aop.aspectj.CustomerBo.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.aop.aspectj</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerBo</span> <span class="kd">implements</span> <span class="n">ICustomerBo</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addCustomer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;addCustomer() is running ...&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteCustomer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;deleteCustomer() is running ...&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">AddCustomerReturnValue</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;AddCustomerReturnValue() is running ...&#34;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">&#34;abc&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addCustomerThrowException</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;addCustomerThrowException() is running ...&#34;</span><span class="o">);</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="o">(</span><span class="s">&#34;Generic Error&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addCustomerAround</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;addCustomerAround() is running ,args:&#34;</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h4 id="661-advice-和-pointcut-结合在一起">6.6.1 Advice 和 Pointcut 结合在一起</h4>
+<ul>
+<li>
+<p><strong>步骤</strong></p>
+<ul>
+<li>创建一个 Aspect 类</li>
+<li>配置 Spring 配置文件</li>
+</ul>
+</li>
+<li>
+<p><strong>pom.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 使用的 jar 包，创建项目时已添加 --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.aspectj<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>aspectjweaver<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.9.2<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.aspectj<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>aspectjtools<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.9.2<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.aspectj<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>aspectjrt<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.9.2<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.spring.aop.aspectj.LoggingAspect.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.aop.aspectj</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.JoinPoint</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.After</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Before</span><span class="o">;</span>
+  
+<span class="nd">@Aspect</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoggingAspect</span> <span class="o">{</span>
+    <span class="nd">@Before</span><span class="o">(</span><span class="s">&#34;execution(public * com.xxx.spring.aop.aspectj.CustomerBo.addCustomer(..))&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logBefore</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">joinPoint</span><span class="o">){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;logBefore() is running ...&#34;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;hijacked:&#34;</span><span class="o">+</span><span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;**********&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@After</span><span class="o">(</span><span class="s">&#34;execution(public * com.xxx.spring.aop.aspectj.CustomerBo.deleteCustomer(..))&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logAfter</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">joinPoint</span><span class="o">){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;logAfter() is running ...&#34;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;hijacked:&#34;</span><span class="o">+</span><span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;**********&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>必须使用 @Aspect 在 <code>LoggingAspect</code> 声明之前注释，以便被框架扫描到</p>
+<ul>
+<li>此例 Advice 和 Pointcut 结合在一起，类中的具体方法 <code>logBefore</code> 和 <code>logAfter</code> 即为 Advice，是要注入的代码，Advice 方法上的表达式为 Pointcut 表达式，即定义了切入点，上例中 <code>@Before</code> 注释的表达式代表执行 <code>CustomerBo.addCustomer</code> 方法时注入 <code>logBefore</code> 代码</li>
+<li>在 LoggingAspect 方法上加入 <code>@Before</code> 或者 <code>@After</code> 等注释</li>
+<li><code>execution(public * com.xxx.spring.aop.aspectj.CustomerBo.addCustomer(..))</code> 是 Aspect 的切入点表达式，其中，<code>*</code> 代表返回类型，后边的就要定义要拦截的方法名。这里写的的是 <code>com.xxx.spring.aop.aspectj.CustomerBo.addCustomer</code> 表示拦截 <code>CustomerBo</code> 中的 <code>addCustomer</code> 方法，<code>(..)</code> 代表参数匹配，此处表示匹配任意数量的参数，可以是 0 个也可以是多个，如果不需要使用参数可以直接用 <code>()</code>，还可以使用 <code>(*)</code> 来匹配一个任意类型的参数，还可以使用 <code>(* , String )</code>，代表匹配两个参数，第二个参数必须是 String 类型的参数</li>
+<li>AspectJ 表达式，可以对整个包定义，例如 <code>execution ( * com.xxx.spring.aop.aspectj.*.*(..))</code> 表示切入点是 <code>com.xxx.spring.aop.aspectj</code> 包中的任意一个类的任意方法</li>
+</ul>
+</li>
+<li>
+<p><strong>SpringAopAspectj.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span> 
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xmlns:aop =</span> <span class="s">&#34;http://www.springframework.org/schema/aop&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd
+</span><span class="s">                             http://www.springframework.org/schema/aop
+</span><span class="s">                             http://www.springframework.org/schema/aop/spring-aop.xsd&#34;</span><span class="nt">&gt;</span>
+  	
+    <span class="c">&lt;!-- 启动 AspectJ 支持，Spring 自动寻找用 @Aspect 注释过的类 --&gt;</span>
+    <span class="nt">&lt;aop:aspectj-autoproxy/&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerBo&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.aspectj.CustomerBo&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;logAspect&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.aspectj.LoggingAspect&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>App.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.aop.aspectj</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ApplicationContext</span> <span class="n">appContext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span> <span class="s">&#34;SpringAOPAspectJ.xml&#34;</span> <span class="o">});</span>
+        <span class="n">ICustomerBo</span> <span class="n">customer</span> <span class="o">=</span> <span class="o">(</span><span class="n">ICustomerBo</span><span class="o">)</span><span class="n">appContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;customerBo&#34;</span><span class="o">);</span>
+  
+        <span class="n">customer</span><span class="o">.</span><span class="na">addCustomer</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;-------------------------------------------&#34;</span><span class="o">);</span>
+        <span class="n">customer</span><span class="o">.</span><span class="na">deleteCustomer</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>编译运行</strong></p>
+<ul>
+<li><code>mvn clean compile</code></li>
+<li><code>mvn exec:java -Dexec.mainClass = &quot;com.xxx.spring.aop.aspectj.App&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="662-将-advicd-和-pointcut-分开">6.6.2 将 Advicd 和 Pointcut 分开</h4>
+<ul>
+<li>
+<p><strong>步骤</strong></p>
+<ul>
+<li>创建 Pointcut</li>
+<li>创建 Advice</li>
+<li>配置 Spring 的配置文件</li>
+</ul>
+</li>
+<li>
+<p><strong>com.xxx.spring.aop.aspectj.PointcutsDefinition.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.aop.aspectj</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Pointcut</span><span class="o">;</span>
+  
+<span class="nd">@Aspect</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PointcutsDefinition</span> <span class="o">{</span>
+    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">&#34;execution(* com.xxx.spring.aop.aspectj.CustomerBo.*(..))&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">customerLog</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>类声明前加入 @Aspect 注释，以便被框架扫描到</p>
+<ul>
+<li>@Pointcut 是切入点声明，指定需要注入的代码的位置；上例中指定切入点为 CustomerBo 类中的所有方法，在实际业务中往往是指定切入点到一个逻辑层，例如 <code>execution (* com.xxx.spring.aop.aspectj.*.*(..)）</code>，表示 aop 切入点为 aspectj 包中所有类的所有方法</li>
+<li>方法 customerLog 是一个<strong>签名</strong>，在 Advice 中可以用此签名代替切入点表达式，所以不需要在方法体内编写实际代码，只起到助记功能，例如此处代表操作 CustomerBo 类时需要的切入点</li>
+</ul>
+</li>
+<li>
+<p><strong>com.xxx.spring.aop.aspectj.LoggingAspect.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.aop.aspectj</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.JoinPoint</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.After</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Before</span><span class="o">;</span>
+  
+<span class="nd">@Aspect</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoggingAspect</span> <span class="o">{</span>
+    <span class="nd">@Before</span><span class="o">(</span><span class="s">&#34;com.xxx.spring.aop.aspectj.PointcutsDefinition.customerLog()&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logBefore</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">joinPoint</span><span class="o">){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;logBefore() is running ...&#34;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;hijacked:&#34;</span><span class="o">+</span><span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;**********&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@After</span><span class="o">(</span><span class="s">&#34;com.xxx.spring.aop.aspectj.PointcutsDefinition.customerLog()&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logAfter</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">joinPoint</span><span class="o">){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;logAfter() is running ...&#34;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;hijacked:&#34;</span><span class="o">+</span><span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;**********&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>@Before 和 @After 使用 PointcutsDefinition 中的方法签名代替 Pointcut 表达式找到相应的切入点，即通过签名找到 PointcutsDefinition 中 customerLog 签名上的 Pointcut 表达式，表达式指定切入点为 CustomerBo 类中的所有方法；此例中 Advice 类 LoggingAspect，为 CustomerBo 中的所有方法都加入了 @Before 和 @After 两种类型的两种操作</p>
+<ul>
+<li>对于 PointcutsDefinition 来说，主要职责是定义 Pointcut，可以在其中定义多个切入点，并且可以用便于记忆的方法签名进行定义</li>
+<li>单独定义 Pointcut 的好处是，一是通过使用有意义的方法名，而不是难读的 Pointcut 表达式，使代码更加直观；二是 Pointcut 可以实现共享，被多个 Advice 直接调用。若有多个 Advice 调用某个 Pointcut，而这个 Pointcut 的表达式在将来有改变时，只需修改一个地方，维护更加方便</li>
+</ul>
+</li>
+<li>
+<p><strong>SpringAOPAspectJ.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xmlns:aop =</span> <span class="s">&#34;http://www.springframework.org/schema/aop&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd
+</span><span class="s">                             http://www.springframework.org/schema/aop
+</span><span class="s">                             http://www.springframework.org/schema/aop/spring-aop.xsd&#34;</span><span class="nt">&gt;</span>
+  	
+    <span class="c">&lt;!-- 启动 AspectJ 支持，Spring 自动寻找用 @Aspect 注释过的类 --&gt;</span>
+    <span class="nt">&lt;aop:aspectj-autoproxy/&gt;</span>
+  
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerBo&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.aspectj.CustomerBo&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;logAspect&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.aop.aspectj.LoggingAspect&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>再编译运行 App.java</strong></p>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-20</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/spring/">Spring</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/spring6_1_%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/" class="prev" rel="prev" title="【Spring】6_1_面向切面编程"><i class="fas fa-angle-left fa-fw"></i>【Spring】6_1_面向切面编程</a>
+            <a href="/posts/spring7_jdbc%E6%A8%A1%E6%9D%BF/" class="next" rel="next" title="【Spring】7_JDBC模板">【Spring】7_JDBC模板<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,49 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>SpringMVC - 标签 - </title>
+        <link>http://example.org/tags/springmvc/</link>
+        <description>SpringMVC - 标签 - </description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 30 Jun 2020 20:32:32 &#43;0800</lastBuildDate><atom:link href="http://example.org/tags/springmvc/" rel="self" type="application/rss+xml" /><item>
+    <title>【SpringMVC】6_拦截器</title>
+    <link>http://example.org/posts/springmvc6_%E6%8B%A6%E6%88%AA%E5%99%A8/</link>
+    <pubDate>Tue, 30 Jun 2020 20:32:32 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springmvc6_%E6%8B%A6%E6%88%AA%E5%99%A8/</guid>
+    <description><![CDATA[Spring MVC 框架 6 拦截器 6.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=InterceptorTest -DarchetypeArtifactId=maven-archetype-webapp 6.2 拦截器原理 拦截器的主要作用是拦截用户的请求并进行相应的处理，如权限验证等：Interceptor 拦]]></description>
+</item><item>
+    <title>【SpringMVC】5_文件上传和下载</title>
+    <link>http://example.org/posts/springmvc5_%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/</link>
+    <pubDate>Mon, 29 Jun 2020 19:19:22 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springmvc5_%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/</guid>
+    <description><![CDATA[Spring MVC 框架 5 文件上传和下载 5.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=FileTest -DarchetypeArtifactId=maven-archetype-webapp 5.2 添加 maven 依赖 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39]]></description>
+</item><item>
+    <title>【SpringMVC】4_数据绑定与校验</title>
+    <link>http://example.org/posts/springmvc4_%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E4%B8%8E%E6%A0%A1%E9%AA%8C/</link>
+    <pubDate>Sat, 27 Jun 2020 21:19:13 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springmvc4_%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E4%B8%8E%E6%A0%A1%E9%AA%8C/</guid>
+    <description><![CDATA[Spring MVC 框架 4 数据绑定与校验 4.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=BindAndValidatorTest -DarchetypeArtifactId=maven-archetype-webapp 4.2 主要校验注解 @Null：验证对象是否为 null @NotNull：验证对象是否不为 null @Assert]]></description>
+</item><item>
+    <title>【SpringMVC】3_常用注解</title>
+    <link>http://example.org/posts/springmvc3_%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/</link>
+    <pubDate>Fri, 26 Jun 2020 19:38:58 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springmvc3_%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/</guid>
+    <description><![CDATA[Spring MVC 框架 3 常用注解 3.1 @Controller 控制器 Controller 负责处理由 DispatcherServlet 分发的请求，把用户请求的数据经过业务处理层处理后封装成一个 Model，再把 Model 返回给对应的 View 进行展示]]></description>
+</item><item>
+    <title>【SpringMVC】2_入门程序</title>
+    <link>http://example.org/posts/springmvc2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/</link>
+    <pubDate>Thu, 25 Jun 2020 20:08:06 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springmvc2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/</guid>
+    <description><![CDATA[Spring MVC 框架 2 入门程序 2.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=SpringMVCTest -DarchetypeArtifactId=maven-archetype-webapp Group Id：包的目录结构，一般为域名的倒序 Atifact Id：项目名称 archetype Artifact Id：使用的 maven 模板名称c 2.2 添加 maven 依赖 pom.xml 1]]></description>
+</item><item>
+    <title>【SpringMVC】1_简介</title>
+    <link>http://example.org/posts/springmvc1_%E7%AE%80%E4%BB%8B/</link>
+    <pubDate>Wed, 24 Jun 2020 21:02:52 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springmvc1_%E7%AE%80%E4%BB%8B/</guid>
+    <description><![CDATA[Spring MVC 框架 1 简介 1.1 概念 Spring MVC 属于 SpringFrameWork 的后续产品，已经融合在 Spring Web Flow 里面，是一个强大灵活的 Web 框架 Spring MVC 提供了一个 DispatcherServlet 作为前端控制器来分配请求；通过策略接口]]></description>
+</item></channel>
+</rss>

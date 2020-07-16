@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【Spring】4_自动扫描与装配 - </title><meta name="Description" content=""><meta property="og:title" content="【Spring】4_自动扫描与装配" />
+<meta property="og:description" content="Spring 框架 4 自动扫描与装配 4.1 自动扫描组件 Spring 支持自动扫描并检查指定包的 bean 或 component，可以不在 xml 文件中繁琐的声明 bean 4.1.1 手动配置与自动扫描 创建" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/spring4_%E8%87%AA%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E8%A3%85%E9%85%8D/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-06-17T20:36:12+08:00" />
+<meta property="article:modified_time" content="2020-06-17T20:36:12+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【Spring】4_自动扫描与装配"/>
+<meta name="twitter:description" content="Spring 框架 4 自动扫描与装配 4.1 自动扫描组件 Spring 支持自动扫描并检查指定包的 bean 或 component，可以不在 xml 文件中繁琐的声明 bean 4.1.1 手动配置与自动扫描 创建"/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/spring4_%E8%87%AA%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E8%A3%85%E9%85%8D/" /><link rel="prev" href="http://example.org/posts/spring3_2_bean%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" /><link rel="next" href="http://example.org/posts/spring5_%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【Spring】4_自动扫描与装配",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/spring4_%E8%87%AA%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E8%A3%85%E9%85%8D\/"
+        },"genre": "posts","keywords": "Java, Spring","wordcount":  2284 ,
+        "url": "http:\/\/example.org\/posts\/spring4_%E8%87%AA%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E8%A3%85%E9%85%8D\/","datePublished": "2020-06-17T20:36:12+08:00","dateModified": "2020-06-17T20:36:12+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【Spring】4_自动扫描与装配</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-17">2020-06-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2284 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#4-自动扫描与装配">4 自动扫描与装配</a>
+      <ul>
+        <li><a href="#41-自动扫描组件">4.1 自动扫描组件</a></li>
+        <li><a href="#42-自动装配-bean">4.2 自动装配 Bean</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="spring-框架">Spring 框架</h1>
+<h2 id="4-自动扫描与装配">4 自动扫描与装配</h2>
+<h3 id="41-自动扫描组件">4.1 自动扫描组件</h3>
+<ul>
+<li>Spring 支持自动扫描并检查指定包的 bean 或 component，可以不在 xml 文件中繁琐的声明 bean</li>
+</ul>
+<h4 id="411-手动配置与自动扫描">4.1.1 手动配置与自动扫描</h4>
+<ul>
+<li>
+<p><strong>创建项目工程</strong></p>
+<ul>
+<li><code>mvn archetype:generate -DgroupId=com.xxx.spring -DartifactId=SpringAuto -DarchetypeArtifactId=maven-archetype-quickstart</code></li>
+</ul>
+</li>
+<li>
+<p><strong>pom.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns =</span> <span class="s">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> 
+         <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://maven.apache.org/POM/4.0.0 
+</span><span class="s">                               http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.xxx.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>SpringAuto<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>SpringAuto<span class="nt">&lt;/name&gt;</span>
+  
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+        <span class="nt">&lt;maven.compiler.source&gt;</span>1.8<span class="nt">&lt;/maven.compiler.source&gt;</span>
+        <span class="nt">&lt;maven.compiler.target&gt;</span>1.8<span class="nt">&lt;/maven.compiler.target&gt;</span>
+        <span class="nt">&lt;spring.version&gt;</span>5.1.1.RELEASE<span class="nt">&lt;/spring.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+  
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>手动配置</strong></p>
+<ul>
+<li>
+<p><strong>com.xxx.spring.dao.CustomerDAO.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// DAO 层
+</span><span class="c1"></span><span class="kn">package</span> <span class="nn">com.xxx.spring.dao</span><span class="o">;</span>
+    
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerDAO</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;Hello , This is CustomerDAO&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.spring.services.CustomerService.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Service 层
+</span><span class="c1"></span><span class="kn">package</span> <span class="nn">com.xxx.spring.services</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">com.xxx.spring.dao.CustomerDAO</span><span class="o">;</span>
+    
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerService</span> <span class="o">{</span>
+    <span class="n">CustomerDAO</span> <span class="n">customerDAO</span><span class="o">;</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setCustomerDAO</span><span class="o">(</span><span class="n">CustomerDAO</span> <span class="n">customerDAO</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">customerDAO</span> <span class="o">=</span> <span class="n">customerDAO</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;CustomerService [customerDAO =&#34;</span> <span class="o">+</span> <span class="n">customerDAO</span> <span class="o">+</span> <span class="s">&#34;]&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>src/main/resources/SpringCustomer.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+    
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.services.CustomerService&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">ref =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    
+    <span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.spring.common.App.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.common</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">com.xxx.spring.services.CustomerService</span><span class="o">;</span>
+    
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span> <span class="n">String</span><span class="o">[]</span> <span class="n">args</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span><span class="s">&#34;SpringCustomer.xml&#34;</span><span class="o">});</span>
+    
+        <span class="n">CustomerService</span> <span class="n">cust</span> <span class="o">=</span> <span class="o">(</span><span class="n">CustomerService</span><span class="o">)</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;customerService&#34;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">cust</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>编译运行</strong></p>
+<ul>
+<li><code>mvn compile</code></li>
+<li><code>mvn exec:java -Dexec.mainClass=&quot;com.xxx.spring.common.App&quot;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>自动扫描组件</strong></p>
+<ul>
+<li>
+<p><strong>CustomerDAO.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.dao</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+    
+<span class="c1">// 注释 @Component 修饰的类是一个自动扫描组件
+</span><span class="c1"></span><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerDAO</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;Hello , This is CustomerDAO&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>CustomerService.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java">  <span class="kn">package</span> <span class="nn">com.xxx.spring.services</span><span class="o">;</span>
+      
+  <span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+      
+  <span class="kn">import</span> <span class="nn">com.xxx.spring.dao.CustomerDAO</span><span class="o">;</span>
+      
+  <span class="nd">@Component</span>
+  <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerService</span> <span class="o">{</span>
+      <span class="nd">@Autowired</span>
+      <span class="n">CustomerDAO</span> <span class="n">customerDAO</span><span class="o">;</span>
+      
+      <span class="c1">// 自动注入不需要 setter 方法
+</span><span class="c1"></span>      <span class="c1">// public void setCustomerDAO(CustomerDAO customerDAO) {
+</span><span class="c1"></span>      <span class="c1">//     this.customerDAO = customerDAO;
+</span><span class="c1"></span>      <span class="c1">// }
+</span><span class="c1"></span>      
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="s">&#34;CustomerService [customerDAO=&#34;</span> <span class="o">+</span> <span class="n">customerDAO</span> <span class="o">+</span> <span class="s">&#34;]&#34;</span><span class="o">;</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>SpringCustomer.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version = &#34;1.0&#34; encoding = &#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xmlns:context =</span> <span class="s">&#34;http://www.springframework.org/schema/context&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/context
+</span><span class="s">                             http://www.springframework.org/schema/context/spring-context.xsd
+</span><span class="s">                             http://www.springframework.org/schema/beans
+</span><span class="s">                             http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+    
+    <span class="c">&lt;!-- 
+</span><span class="c">    context:component-scan 标签：Spring 的自动扫描特性引入 
+</span><span class="c">    base-package：组件的存放位置；
+</span><span class="c">    Spring 将扫描对应文件夹下的 bean（@Component 注释过的），将这些 bean 注册到容器中 
+</span><span class="c">    --&gt;</span>
+    <span class="nt">&lt;context:component-scan</span> <span class="na">base-package =</span> <span class="s">&#34;com.xxx.spring&#34;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul>
+<h4 id="412-自动扫描组件的注释类型">4.1.2 自动扫描组件的注释类型</h4>
+<ul>
+<li>
+<p><strong>自定义扫描组件名称</strong></p>
+<ul>
+<li>
+<p>默认情况，Spring 将把组件 Class 的第一个字母变成小写，来作为自动扫描组件的名称</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// CustomerService 转变为 customerService，可以用 customerService 调用组件
+</span><span class="c1"></span><span class="n">CustomerService</span> <span class="n">cust</span> <span class="o">=</span> <span class="o">(</span><span class="n">CustomerService</span><span class="o">)</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;customerService&#34;</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>自定义组件名称</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="o">;</span>
+    
+<span class="nd">@Service</span><span class="o">(</span><span class="s">&#34;AAA&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerService</span> <span class="o">{...}</span>
+<span class="c1">// 调用
+</span><span class="c1"></span><span class="n">CustomerService</span> <span class="n">cust</span> <span class="o">=</span> <span class="o">(</span><span class="n">CustomerService</span><span class="o">)</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;AAA&#34;</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+<li>
+<p><strong>四种注释类型</strong></p>
+<ul>
+<li><strong>@Component</strong>：表示一个自动扫描 component</li>
+<li><strong>@Repository</strong>：表示持久化层的 DAO component</li>
+<li><strong>@Service</strong>：表示业务逻辑层的 Service component</li>
+<li><strong>@Controller</strong>：表示表示层的 Controller component</li>
+</ul>
+</li>
+<li>
+<p><strong>示例</strong></p>
+<ul>
+<li>
+<p>@Repository 、@Service 、@Controller 三种注释是为了加强代码的阅读性而创造的</p>
+</li>
+<li>
+<p>DAO 层</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.dao</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Repository</span><span class="o">;</span>
+    
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerDAO</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;Hello , This is CustomerDAO&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Service 层</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.services</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">com.xxx.spring.dao.CustomerDAO</span><span class="o">;</span>
+    
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerService</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="n">CustomerDAO</span> <span class="n">customerDAO</span><span class="o">;</span>
+    
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;CustomerService [customerDAO=&#34;</span> <span class="o">+</span> <span class="n">customerDAO</span> <span class="o">+</span> <span class="s">&#34;]&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul>
+<h4 id="413-自动扫描中过滤组件">4.1.3 自动扫描中过滤组件</h4>
+<ul>
+<li>
+<p><strong>Filter Component - include</strong></p>
+<ul>
+<li>
+<p><strong>CustomerDAO.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.dao</span><span class="o">;</span>
+    
+<span class="c1">// 组件只要匹配定义的 regex 的命名规则，类前就不需要用 @Component 进行注释
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerDAO</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;Hello , This is CustomerDAO&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>CustomerService.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.services</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.xxx.spring.dao.CustomerDAO</span><span class="o">;</span>
+    
+<span class="c1">// 组件只要匹配定义的 regex 的命名规则，类前就不需要用 @Component 进行注释
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerService</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="n">CustomerDAO</span> <span class="n">customerDAO</span><span class="o">;</span>
+    
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;CustomerService [customerDAO=&#34;</span> <span class="o">+</span> <span class="n">customerDAO</span> <span class="o">+</span> <span class="s">&#34;]&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>SpringFiltering.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns =</span> <span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span class="na">xmlns:xsi =</span> <span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span class="na">xmlns:context =</span> <span class="s">&#34;http://www.springframework.org/schema/context&#34;</span>
+       <span class="na">xsi:schemaLocation =</span> <span class="s">&#34;http://www.springframework.org/schema/context
+</span><span class="s">                    http://www.springframework.org/schema/context/spring-context.xsd
+</span><span class="s">                    http://www.springframework.org/schema/beans
+</span><span class="s">                    http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+        
+    <span class="c">&lt;!-- 所有文件名字，只要包含 DAO 和 Service（DAO.，Service.）关键字的，都将被检查注册到 Spring 容器中 --&gt;</span>
+  <span class="nt">&lt;context:component-scan</span> <span class="na">base-package =</span> <span class="s">&#34;com.xxx.spring&#34;</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;context:include-filter</span> <span class="na">type =</span> <span class="s">&#34;regex&#34;</span>
+                      <span class="na">expression =</span> <span class="s">&#34;com.xxx.spring.dao.*DAO.*&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;context:include-filter</span> <span class="na">type =</span> <span class="s">&#34;regex&#34;</span>
+                      <span class="na">expression =</span> <span class="s">&#34;com.xxx.spring.services.*Service.*&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/context:component-scan&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>App.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.shiyanlou.spring.common</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">org.springframework.context.ApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+    
+<span class="kn">import</span> <span class="nn">com.lei.customer.services.CustomerService</span><span class="o">;</span>
+    
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span> <span class="n">String</span><span class="o">[]</span> <span class="n">args</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span>
+        <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span><span class="s">&#34;SpringFiltering.xml&#34;</span><span class="o">});</span>
+            
+        <span class="n">CustomerService</span> <span class="n">cust</span> <span class="o">=</span> <span class="o">(</span><span class="n">CustomerService</span><span class="o">)</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&#34;customerService&#34;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">cust</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+<li>
+<p><strong>Filter Component——exclude</strong></p>
+<ul>
+<li>
+<p>制定组件避免被 Spring 发现并被注册到容器中</p>
+</li>
+<li>
+<p><strong>SpringFiltering.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 排除用 @Service 注释过的组件 --&gt;</span>
+<span class="nt">&lt;context:component-scan</span> <span class="na">base-package =</span> <span class="s">&#34;com.xxx.spring&#34;</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;context:exclude-filter</span> <span class="na">type =</span> <span class="s">&#34;annotation&#34;</span> <span class="na">expression =</span> <span class="s">&#34;org.springframework.stereotype.Service&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/context:component-scan&gt;</span>
+    
+<span class="c">&lt;!-- 排除包含 DAO 关键字的组件 --&gt;</span>
+<span class="nt">&lt;context:component-scan</span> <span class="na">base-package =</span> <span class="s">&#34;com.xxx.spring&#34;</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;context:exclude-filter</span> <span class="na">type =</span> <span class="s">&#34;regex&#34;</span> <span class="na">expression =</span> <span class="s">&#34;com.xxx.spring.dao.*DAO.*&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/context:component-scan&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul>
+<h3 id="42-自动装配-bean">4.2 自动装配 Bean</h3>
+<ul>
+<li>
+<p><strong>自动装配</strong>：将一个 Bean 注入到其他 Bean 的 Property 中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="o">&lt;</span><span class="n">bean</span> <span class="n">id</span> <span class="o">=</span> <span class="s">&#34;customer&#34;</span> <span class="kd">class</span> <span class="err">= &#34;</span><span class="nc">com</span><span class="o">.</span><span class="na">xxx</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">autowire</span><span class="o">.</span><span class="na">common</span><span class="o">.</span><span class="na">Customer</span><span class="s">&#34; autowire = &#34;</span><span class="n">byName</span><span class="err">&#34;</span> <span class="o">/&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>五种自动装配模式</strong></p>
+<ul>
+<li><strong>no</strong> ：默认情况下，不自动装配，通过 ref 属性手动设定</li>
+<li><strong>byName</strong>：根据 Property 的 Name 自动装配，如果一个 bean 的 name，和另一个 bean 中的 Property 的 name 相同，则自动装配这个 bean 到 Property 中</li>
+<li><strong>byType</strong>：根据 Property 的数据类型（ Type ）自动装配，如果一个 bean 的数据类型，兼容另一个 bean 中 Property 的数据类型，则自动装配</li>
+<li><strong>constructor</strong>：根据构造函数参数的数据类型，进行 byType 模式的自动装配</li>
+<li><strong>autodetect</strong>：如果发现默认的构造函数用 constructor 模式，否则用 byType 模式</li>
+</ul>
+</li>
+<li>
+<p><strong>CustomerDAO.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.dao</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerDAO</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="s">&#34;Hello , This is CustomerDAO&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>CustomerService.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.spring.services</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">com.xxx.spring.dao.CustomerDAO</span><span class="o">;</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerService</span> <span class="o">{</span>
+    <span class="n">CustomerDAO</span> <span class="n">customerDAO</span><span class="o">;</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setCustomerDAO</span><span class="o">(</span><span class="n">CustomerDAO</span> <span class="n">customerDAO</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">customerDAO</span> <span class="o">=</span> <span class="n">customerDAO</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;CustomerService [customerDAO=&#34;</span> <span class="o">+</span> <span class="n">customerDAO</span> <span class="o">+</span> <span class="s">&#34;]&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Auto-Wiring</strong></p>
+<ul>
+<li>
+<p><strong>no</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 默认情况下，需要通过 ref 来装配 bean --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.services.CustomerService&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">ref =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+    
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>byName</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 根据属性 Property 的名字装配 bean --&gt;</span>
+    
+<span class="c">&lt;!-- Spring 会自动寻找与属性名字 customerDAO 相同的 bean，找到后，通过调用 setCustomerDAO(CustomerDAO customerDAO) 将其注入属性 --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.services.CustomerService&#34;</span> <span class="na">autowire =</span> <span class="s">&#34;byName&#34;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+    
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+    
+<span class="c">&lt;!-- 如果根据Property name 找不到对应的 bean 配置 --&gt;</span>
+<span class="c">&lt;!-- CustomerService 中 Property 名字是 customerDAO，但是配置文件中找不到 customerDAO，只有 customerDAO_another，这时就会装配失败 --&gt;</span>
+<span class="c">&lt;!-- 运行后，CustomerService 中 customerDAO = null --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.services.CustomerService&#34;</span> <span class="na">autowire =</span> <span class="s">&#34;byName&#34;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+    
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO_another&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>byType</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 根据属性 Property 的数据类型自动装配 --&gt;</span>
+    
+<span class="c">&lt;!-- Spring 会自动寻找与属性类型相同的 bean，找到后，通过调用 setCustomerDAO(CustomerDAO customerDAO) 将其注入 --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.services.CustomerService&#34;</span> <span class="na">autowire =</span> <span class="s">&#34;byType&#34;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+        
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+    
+<span class="c">&lt;!-- 配置文件中有两个类型相同的 bean --&gt;</span>
+<span class="c">&lt;!-- 有两种相同数据类型的 bean 被配置，将抛出 UnsatisfiedDependencyException 异常 --&gt;</span>
+<span class="c">&lt;!-- 选择了 byType 类型的自动装配，需确认配置文件中每个数据类型定义一个唯一的 bean --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.services.CustomerService&#34;</span> <span class="na">autowire =</span> <span class="s">&#34;byType&#34;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+    
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO_another&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>constructor</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 根据构造函数 constructor 自动装配 --&gt;</span>
+    
+<span class="c">&lt;!-- Spring 会寻找与参数数据类型相同的 bean，通过构造函数 public Customer(Person person) 将其注入  --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.services.CustomerService&#34;</span> <span class="na">autowire =</span> <span class="s">&#34;constructor&#34;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+    
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+    
+<span class="c">&lt;!-- 项目中 autowire 结合 dependency-check 一起使用是一种很好的方法，这样能够确保属性总是可以成功注入 --&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerService&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.services.CustomerService&#34;</span> <span class="na">autowire =</span> <span class="s">&#34;autodetect&#34;</span> <span class="na">dependency-check =</span> <span class="s">&#34;objects&#34;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+    
+<span class="nt">&lt;bean</span> <span class="na">id =</span> <span class="s">&#34;customerDAO&#34;</span> <span class="na">class =</span> <span class="s">&#34;com.xxx.spring.dao.CustomerDAO&#34;</span> <span class="nt">/&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-17</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/spring/">Spring</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/spring3_2_bean%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="prev" rel="prev" title="【Spring】3_2_Bean对象的作用域与生命周期"><i class="fas fa-angle-left fa-fw"></i>【Spring】3_2_Bean对象的作用域与生命周期</a>
+            <a href="/posts/spring5_%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE/" class="next" rel="next" title="【Spring】5_基于注解配置">【Spring】5_基于注解配置<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
