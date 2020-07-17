@@ -1,0 +1,28 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>SpringBoot - 标签 - </title>
+        <link>http://example.org/tags/springboot/</link>
+        <description>SpringBoot - 标签 - </description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 03 Jul 2020 19:49:32 &#43;0800</lastBuildDate><atom:link href="http://example.org/tags/springboot/" rel="self" type="application/rss+xml" /><item>
+    <title>【SpringBoot】3_配置文件</title>
+    <link>http://example.org/posts/springboot3_%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</link>
+    <pubDate>Fri, 03 Jul 2020 19:49:32 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot3_%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</guid>
+    <description><![CDATA[SpringBoot 框架 3 配置文件 3.1 application.properties 配置文件 配置以键值对的形式设置，如 1 2 3 4 5 6 # src/main/resources/application.properties # 设置端口号 server.port = 8080 # 自定义属性 xxx.springboot = Hello_World 创建项目 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-config -DarchetypeArtifactId=maven-archetype-quickstart pom.xml 和 com.xxx.springboot.SpringbootApplication.java 与入门程序]]></description>
+</item><item>
+    <title>【SpringBoot】2_入门程序</title>
+    <link>http://example.org/posts/springboot2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/</link>
+    <pubDate>Thu, 02 Jul 2020 20:35:20 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/</guid>
+    <description><![CDATA[SpringBoot 框架 2 入门程序 2.1 创建项目 使用 Spring Initializr 创建 项目搭建网址 手动创建 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-helloworld -DarchetypeArtifactId=maven-archetype-quickstart 2.2 修改目录 添加 src/main/resources 删除 src/test 添加 com.xxx.springboot 添加 com.xxx.springboot.controller 2.3 添加 maven 依赖 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12]]></description>
+</item><item>
+    <title>【SpringBoot】1_简介</title>
+    <link>http://example.org/posts/springboot1_%E7%AE%80%E4%BB%8B/</link>
+    <pubDate>Wed, 01 Jul 2020 20:04:55 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot1_%E7%AE%80%E4%BB%8B/</guid>
+    <description><![CDATA[SpringBoot 框架 官方文档 1 简介 SpringBoot 是一个基于 Spring 开发的 javaweb 的框架，以约定大于配置的核心思想，默认进行了很多设置 优点 使用 Spring Initializr 可以快速配置一个 Spring Boot 应用 对大量的框]]></description>
+</item></channel>
+</rss>
