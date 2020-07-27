@@ -3,7 +3,63 @@
         <title>Java - 标签 - </title>
         <link>http://example.org/tags/java/</link>
         <description>Java - 标签 - </description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 03 Jul 2020 19:49:32 &#43;0800</lastBuildDate><atom:link href="http://example.org/tags/java/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 13 Jul 2020 20:52:50 &#43;0800</lastBuildDate><atom:link href="http://example.org/tags/java/" rel="self" type="application/rss+xml" /><item>
+    <title>【SpringBoot】11_Profile配置说明及线上部署</title>
+    <link>http://example.org/posts/springboot11_profile%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E%E5%8F%8A%E7%BA%BF%E4%B8%8A%E9%83%A8%E7%BD%B2/</link>
+    <pubDate>Mon, 13 Jul 2020 20:52:50 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot11_profile%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E%E5%8F%8A%E7%BA%BF%E4%B8%8A%E9%83%A8%E7%BD%B2/</guid>
+    <description><![CDATA[SpringBoot 框架 11 Profile 配置说明及线上部署 11.1 Profile 配置 Spring Boot 提供了一种命名规则 application-{profile}.properties，profile 为]]></description>
+</item><item>
+    <title>【SpringBoot】10_集成RabbitMQ</title>
+    <link>http://example.org/posts/springboot10_%E9%9B%86%E6%88%90rabbitmq/</link>
+    <pubDate>Sat, 11 Jul 2020 21:07:39 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot10_%E9%9B%86%E6%88%90rabbitmq/</guid>
+    <description><![CDATA[SpringBoot 框架 10 集成 RabbitMQ 10.1 安装并启动 RabbitMQ 安装：sudo apt-get install rabbitmq-server 启动：sudo service rabbitmq-server start 关闭：sudo service rabbitmq-server stop 查看状态：sudo service rabbitmq-server status 10.2 新建项目 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-rabbit -DarchetypeArtifactId=maven-archetype-quickstart 10.3 添加 maven]]></description>
+</item><item>
+    <title>【SpringBoot】9_集成Redis</title>
+    <link>http://example.org/posts/springboot9_%E9%9B%86%E6%88%90redis/</link>
+    <pubDate>Fri, 10 Jul 2020 20:21:28 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot9_%E9%9B%86%E6%88%90redis/</guid>
+    <description><![CDATA[SpringBoot 框架 9 集成 Redis 9.1 新建项目 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-redis -DarchetypeArtifactId=maven-archetype-quickstart 9.2 添加 maven 依赖 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 &lt;?xml]]></description>
+</item><item>
+    <title>【SpringBoot】8_集成Mybatis</title>
+    <link>http://example.org/posts/springboot8_%E9%9B%86%E6%88%90mybatis/</link>
+    <pubDate>Thu, 09 Jul 2020 20:28:17 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot8_%E9%9B%86%E6%88%90mybatis/</guid>
+    <description><![CDATA[SpringBoot 框架 8 集成 Mybatis 8.0 创建数据库和表 1 2 3 4 5 6 7 8 create database test; use test; CREATE TABLE user ( id int PRIMARY KEY AUTO_INCREMENT, username varchar(50), password varchar(50) ); 8.1 新建项目 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-mybatis -DarchetypeArtifactId=maven-archetype-quickstart 8.2 添加 maven 依赖 pom.xml 1 2 3 4 5 6 7 8 9 10 11]]></description>
+</item><item>
+    <title>【SpringBoot】7_多数据源</title>
+    <link>http://example.org/posts/springboot7_%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90/</link>
+    <pubDate>Wed, 08 Jul 2020 20:04:06 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot7_%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90/</guid>
+    <description><![CDATA[SpringBoot 框架 7 多数据源 7.1 新建项目 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-multidatasource -DarchetypeArtifactId=maven-archetype-quickstart 7.2 创建数据库和表 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 create database test1; use test1; CREATE TABLE user_one ( id int PRIMARY KEY AUTO_INCREMENT, username varchar(50), password varchar(50) ); create database test2; use test2; CREATE TABLE]]></description>
+</item><item>
+    <title>【SpringBoot】6_AOP</title>
+    <link>http://example.org/posts/springboot6_aop/</link>
+    <pubDate>Tue, 07 Jul 2020 19:17:33 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot6_aop/</guid>
+    <description><![CDATA[SpringBoot 框架 6 AOP 6.1 AOP注解 注解 描述 @Before 在方法执行前执行 @After 在方法执行后执行 @AfterReturning 在结果返回后执行 @AfterThrowing 在抛出异常后执行 @Around 环绕通知，相当于同时使用 @Before 和 @After 6.2 使用]]></description>
+</item><item>
+    <title>【SpringBoot】5_事务控制</title>
+    <link>http://example.org/posts/springboot5_%E4%BA%8B%E5%8A%A1%E6%8E%A7%E5%88%B6/</link>
+    <pubDate>Mon, 06 Jul 2020 19:32:23 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot5_%E4%BA%8B%E5%8A%A1%E6%8E%A7%E5%88%B6/</guid>
+    <description><![CDATA[SpringBoot 框架 5 事务控制 5.1 数据库事务 指作为单个逻辑工作单元执行的一系列操作，要么完全地执行，要么完全地不执行；可以确保除非事务性单元内的所有操作都成]]></description>
+</item><item>
+    <title>【SpringBoot】4_Web支持</title>
+    <link>http://example.org/posts/springboot4_web%E6%94%AF%E6%8C%81/</link>
+    <pubDate>Sun, 05 Jul 2020 20:17:04 &#43;0800</pubDate>
+    <author></author>
+    <guid>http://example.org/posts/springboot4_web%E6%94%AF%E6%8C%81/</guid>
+    <description><![CDATA[SpringBoot 框架 4 Web 支持 4.1 MVC 基本配置 server.servlet.path：用于设置dispatcher servlet的监听路径 spring.mvc.]]></description>
+</item><item>
     <title>【SpringBoot】3_配置文件</title>
     <link>http://example.org/posts/springboot3_%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</link>
     <pubDate>Fri, 03 Jul 2020 19:49:32 &#43;0800</pubDate>
@@ -17,61 +73,5 @@
     <author></author>
     <guid>http://example.org/posts/springboot2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/</guid>
     <description><![CDATA[SpringBoot 框架 2 入门程序 2.1 创建项目 使用 Spring Initializr 创建 项目搭建网址 手动创建 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-helloworld -DarchetypeArtifactId=maven-archetype-quickstart 2.2 修改目录 添加 src/main/resources 删除 src/test 添加 com.xxx.springboot 添加 com.xxx.springboot.controller 2.3 添加 maven 依赖 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12]]></description>
-</item><item>
-    <title>【SpringBoot】1_简介</title>
-    <link>http://example.org/posts/springboot1_%E7%AE%80%E4%BB%8B/</link>
-    <pubDate>Wed, 01 Jul 2020 20:04:55 &#43;0800</pubDate>
-    <author></author>
-    <guid>http://example.org/posts/springboot1_%E7%AE%80%E4%BB%8B/</guid>
-    <description><![CDATA[SpringBoot 框架 官方文档 1 简介 SpringBoot 是一个基于 Spring 开发的 javaweb 的框架，以约定大于配置的核心思想，默认进行了很多设置 优点 使用 Spring Initializr 可以快速配置一个 Spring Boot 应用 对大量的框]]></description>
-</item><item>
-    <title>【SpringMVC】6_拦截器</title>
-    <link>http://example.org/posts/springmvc6_%E6%8B%A6%E6%88%AA%E5%99%A8/</link>
-    <pubDate>Tue, 30 Jun 2020 20:32:32 &#43;0800</pubDate>
-    <author></author>
-    <guid>http://example.org/posts/springmvc6_%E6%8B%A6%E6%88%AA%E5%99%A8/</guid>
-    <description><![CDATA[Spring MVC 框架 6 拦截器 示例代码 6.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=InterceptorTest -DarchetypeArtifactId=maven-archetype-webapp 6.2 拦截器原理 拦截器的主要作用是拦截用户的请求并进行相应的处理，如权限验证等：Intercep]]></description>
-</item><item>
-    <title>【SpringMVC】5_文件上传和下载</title>
-    <link>http://example.org/posts/springmvc5_%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/</link>
-    <pubDate>Mon, 29 Jun 2020 19:19:22 &#43;0800</pubDate>
-    <author></author>
-    <guid>http://example.org/posts/springmvc5_%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/</guid>
-    <description><![CDATA[Spring MVC 框架 5 文件上传和下载 示例代码 5.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=FileTest -DarchetypeArtifactId=maven-archetype-webapp 5.2 添加 maven 依赖 pom.xml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35]]></description>
-</item><item>
-    <title>【SpringMVC】4_数据绑定与校验</title>
-    <link>http://example.org/posts/springmvc4_%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E4%B8%8E%E6%A0%A1%E9%AA%8C/</link>
-    <pubDate>Sat, 27 Jun 2020 21:19:13 &#43;0800</pubDate>
-    <author></author>
-    <guid>http://example.org/posts/springmvc4_%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E4%B8%8E%E6%A0%A1%E9%AA%8C/</guid>
-    <description><![CDATA[Spring MVC 框架 4 数据绑定与校验 示例代码 4.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=BindAndValidatorTest -DarchetypeArtifactId=maven-archetype-webapp 4.2 主要校验注解 @Null：验证对象是否为 null @NotNull：验证对象是否不为 null @As]]></description>
-</item><item>
-    <title>【SpringMVC】3_常用注解</title>
-    <link>http://example.org/posts/springmvc3_%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/</link>
-    <pubDate>Fri, 26 Jun 2020 19:38:58 &#43;0800</pubDate>
-    <author></author>
-    <guid>http://example.org/posts/springmvc3_%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3/</guid>
-    <description><![CDATA[Spring MVC 框架 3 常用注解 3.1 @Controller 控制器 Controller 负责处理由 DispatcherServlet 分发的请求，把用户请求的数据经过业务处理层处理后封装成一个 Model，再把 Model 返回给对应的 View 进行展示]]></description>
-</item><item>
-    <title>【SpringMVC】2_入门程序</title>
-    <link>http://example.org/posts/springmvc2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/</link>
-    <pubDate>Thu, 25 Jun 2020 20:08:06 &#43;0800</pubDate>
-    <author></author>
-    <guid>http://example.org/posts/springmvc2_%E5%85%A5%E9%97%A8%E7%A8%8B%E5%BA%8F/</guid>
-    <description><![CDATA[Spring MVC 框架 2 入门程序 示例代码 2.1 创建项目工程 mvn archetype:generate -DgroupId=com.xxx -DartifactId=SpringMVCTest -DarchetypeArtifactId=maven-archetype-webapp Group Id：包的目录结构，一般为域名的倒序 Atifact Id：项目名称 archetype Artifact Id：使用的 maven 模板名称c 2.2 添加 maven]]></description>
-</item><item>
-    <title>【SpringMVC】1_简介</title>
-    <link>http://example.org/posts/springmvc1_%E7%AE%80%E4%BB%8B/</link>
-    <pubDate>Wed, 24 Jun 2020 21:02:52 &#43;0800</pubDate>
-    <author></author>
-    <guid>http://example.org/posts/springmvc1_%E7%AE%80%E4%BB%8B/</guid>
-    <description><![CDATA[Spring MVC 框架 1 简介 1.1 概念 Spring MVC 属于 SpringFrameWork 的后续产品，已经融合在 Spring Web Flow 里面，是一个强大灵活的 Web 框架 Spring MVC 提供了一个 DispatcherServlet 作为前端控制器来分配请求；通过策略接口]]></description>
-</item><item>
-    <title>【Spring】8_事务管理</title>
-    <link>http://example.org/posts/spring8_%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86/</link>
-    <pubDate>Tue, 23 Jun 2020 20:17:26 &#43;0800</pubDate>
-    <author></author>
-    <guid>http://example.org/posts/spring8_%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86/</guid>
-    <description><![CDATA[Spring 框架 8 Spring 事务管理 示例代码 事务的四个特性 原子性（Atomicity）：事务是一个原子操作，由一系列动作组成；事务的原子性确保动作要么全部完成]]></description>
 </item></channel>
 </rss>

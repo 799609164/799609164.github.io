@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>【SpringBoot】7_多数据源 - </title><meta name="Description" content=""><meta property="og:title" content="【SpringBoot】7_多数据源" />
+<meta property="og:description" content="SpringBoot 框架 7 多数据源 7.1 新建项目 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-multidatasource -DarchetypeArtifactId=maven-archetype-quickstart 7.2 创建数据库和表 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 create database test1; use test1; CREATE TABLE user_one ( id int PRIMARY KEY AUTO_INCREMENT, username varchar(50), password varchar(50) ); create database test2; use test2; CREATE TABLE" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/springboot7_%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90/" />
+<meta property="og:image" content="http://example.org/logo.png"/>
+<meta property="article:published_time" content="2020-07-08T20:04:06+08:00" />
+<meta property="article:modified_time" content="2020-07-08T20:04:06+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="【SpringBoot】7_多数据源"/>
+<meta name="twitter:description" content="SpringBoot 框架 7 多数据源 7.1 新建项目 mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-multidatasource -DarchetypeArtifactId=maven-archetype-quickstart 7.2 创建数据库和表 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 create database test1; use test1; CREATE TABLE user_one ( id int PRIMARY KEY AUTO_INCREMENT, username varchar(50), password varchar(50) ); create database test2; use test2; CREATE TABLE"/>
+<meta name="application-name" content="QiChuan&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="QiChuan&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://image.flaticon.com/icons/svg/3062/3062276.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/springboot7_%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90/" /><link rel="prev" href="http://example.org/posts/springboot6_aop/" /><link rel="next" href="http://example.org/posts/springboot8_%E9%9B%86%E6%88%90mybatis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "【SpringBoot】7_多数据源",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/springboot7_%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90\/"
+        },"genre": "posts","keywords": "Java, SpringBoot","wordcount":  1476 ,
+        "url": "http:\/\/example.org\/posts\/springboot7_%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90\/","datePublished": "2020-07-08T20:04:06+08:00","dateModified": "2020-07-08T20:04:06+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i> Blogs </a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i> Categories </a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i> Tags </a><a class="menu-item" href="/about/"><i class='fa fa-address-card' aria-hidden='true'></i> About </a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>QiChuan&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="博客"><i class='fa fa-book' aria-hidden='true'></i>Blogs</a><a class="menu-item" href="/categories/" title="分类"><i class='fa fa-align-justify' aria-hidden='true'></i>Categories</a><a class="menu-item" href="/tags/" title="标签"><i class='fa fa-tags' aria-hidden='true'></i>Tags</a><a class="menu-item" href="/about/" title=""><i class='fa fa-address-card' aria-hidden='true'></i>About</a><a class="menu-item" href="https://github.com/799609164" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">【SpringBoot】7_多数据源</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i></a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/javaframework/"><i class="far fa-folder fa-fw"></i>JavaFramework</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-07-08">2020-07-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1476 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#7-多数据源">7 多数据源</a>
+      <ul>
+        <li><a href="#71-新建项目">7.1 新建项目</a></li>
+        <li><a href="#72-创建数据库和表">7.2 创建数据库和表</a></li>
+        <li><a href="#73-添加-maven-依赖">7.3 添加 maven 依赖</a></li>
+        <li><a href="#74-多数据源配置">7.4 多数据源配置</a></li>
+        <li><a href="#75-第一个数据源">7.5 第一个数据源</a></li>
+        <li><a href="#76-第二个数据源">7.6 第二个数据源</a></li>
+        <li><a href="#77-配置文件">7.7 配置文件</a></li>
+        <li><a href="#78-主程序">7.8 主程序</a></li>
+        <li><a href="#79-测试程序">7.9 测试程序</a></li>
+        <li><a href="#710-运行测试">7.10 运行测试</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="springboot-框架">SpringBoot 框架</h1>
+<h2 id="7-多数据源">7 多数据源</h2>
+<h3 id="71-新建项目">7.1 新建项目</h3>
+<ul>
+<li><code>mvn archetype:generate -DgroupId=com.xxx -DartifactId=springboot-multidatasource -DarchetypeArtifactId=maven-archetype-quickstart</code></li>
+</ul>
+<h3 id="72-创建数据库和表">7.2 创建数据库和表</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">database</span> <span class="n">test1</span><span class="p">;</span>
+<span class="n">use</span> <span class="n">test1</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">user_one</span>
+<span class="p">(</span>
+  <span class="n">id</span> <span class="nb">int</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+  <span class="n">username</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+  <span class="n">password</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">create</span> <span class="k">database</span> <span class="n">test2</span><span class="p">;</span>
+
+<span class="n">use</span> <span class="n">test2</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">user_two</span>
+<span class="p">(</span>
+  <span class="n">id</span> <span class="nb">int</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+  <span class="n">username</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+  <span class="n">password</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="73-添加-maven-依赖">7.3 添加 maven 依赖</h3>
+<ul>
+<li>
+<p><strong>pom.xml</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> 
+         <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0 
+</span><span class="s">                             http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.xxx<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>springboot-multidatasource<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;packaging&gt;</span>jar<span class="nt">&lt;/packaging&gt;</span>
+    <span class="nt">&lt;name&gt;</span>springboot-multidatasource<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
+  
+    <span class="c">&lt;!-- 设置父模块，继承父模块中的配置信息 --&gt;</span>
+    <span class="nt">&lt;parent&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>2.0.4.RELEASE<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;relativePath/&gt;</span>
+    <span class="nt">&lt;/parent&gt;</span>
+  
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+        <span class="nt">&lt;project.reporting.outputEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.reporting.outputEncoding&gt;</span>
+        <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+  
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>mysql<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>mysql-connector-java<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+  
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="c">&lt;!-- spirng Boot maven插件 --&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="74-多数据源配置">7.4 多数据源配置</h3>
+<ul>
+<li>
+<p><strong>com.xxx.springboot.DataSourceConfig.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.jdbc.DataSourceProperties</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.context.properties.ConfigurationProperties</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Primary</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">javax.sql.DataSource</span><span class="o">;</span>
+  
+<span class="cm">/**
+</span><span class="cm">    * 数据源配置
+</span><span class="cm">    */</span>
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataSourceConfig</span> <span class="o">{</span>
+  
+    <span class="nd">@Bean</span>
+    <span class="nd">@Primary</span> <span class="c1">// 表示为主数据源
+</span><span class="c1"></span>    <span class="c1">// 读取前缀为 app.datasource.first 的属性
+</span><span class="c1"></span>    <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="s">&#34;app.datasource.first&#34;</span><span class="o">)</span> 
+    <span class="kd">public</span> <span class="n">DataSourceProperties</span> <span class="nf">firstDataSourceProperties</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">DataSourceProperties</span><span class="o">();</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Bean</span>
+    <span class="nd">@Primary</span>
+    <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="s">&#34;app.datasource.first&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">firstDataSource</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">firstDataSourceProperties</span><span class="o">().</span><span class="na">initializeDataSourceBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+  
+    <span class="c1">// 第二个数据源，不能加 @Primary 注解
+</span><span class="c1"></span>    <span class="nd">@Bean</span> 
+    <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="s">&#34;app.datasource.second&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">DataSourceProperties</span> <span class="nf">secondDataSourceProperties</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">DataSourceProperties</span><span class="o">();</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Bean</span>
+    <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="s">&#34;app.datasource.second&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">secondDataSource</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">secondDataSourceProperties</span><span class="o">().</span><span class="na">initializeDataSourceBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="75-第一个数据源">7.5 第一个数据源</h3>
+<ul>
+<li>
+<p><strong>com.xxx.springboot.first.UserOne.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot.first</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">javax.persistence.*</span><span class="o">;</span>
+  
+<span class="cm">/**
+</span><span class="cm">    * 设置表名为 two_one，并且标记该类为实体类
+</span><span class="cm">    */</span>
+<span class="nd">@Table</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;user_one&#34;</span><span class="o">)</span>
+<span class="nd">@Entity</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserOne</span> <span class="o">{</span>
+  
+    <span class="cm">/**
+</span><span class="cm">    * 设置主键生成策略
+</span><span class="cm">    */</span>
+    <span class="nd">@GeneratedValue</span><span class="o">(</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">GenerationType</span><span class="o">.</span><span class="na">IDENTITY</span><span class="o">)</span>
+    <span class="nd">@Id</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="n">id</span><span class="o">;</span>
+  
+    <span class="nd">@Column</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+  
+    <span class="nd">@Column</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+  
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getUsername</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">username</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPassword</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="o">(</span><span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#34;User{&#34;</span> <span class="o">+</span>
+                <span class="s">&#34;id=&#34;</span> <span class="o">+</span> <span class="n">id</span> <span class="o">+</span>
+                <span class="s">&#34;, username=&#39;&#34;</span> <span class="o">+</span> <span class="n">username</span> <span class="o">+</span> <span class="sc">&#39;\&#39;&#39;</span> <span class="o">+</span>
+                <span class="s">&#34;, password=&#39;&#34;</span> <span class="o">+</span> <span class="n">password</span> <span class="o">+</span> <span class="sc">&#39;\&#39;&#39;</span> <span class="o">+</span>
+                <span class="sc">&#39;}&#39;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.springboot.first.FirstDataSourceConfiguration.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot.first</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Qualifier</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Primary</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.jpa.repository.config.EnableJpaRepositories</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.orm.jpa.JpaTransactionManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.transaction.PlatformTransactionManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.transaction.annotation.EnableTransactionManagement</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">javax.sql.DataSource</span><span class="o">;</span>
+  
+<span class="nd">@Configuration</span>
+<span class="nd">@EnableTransactionManagement</span>
+<span class="nd">@EnableJpaRepositories</span><span class="o">(</span>
+    <span class="c1">// 设置 Repository 所在位置
+</span><span class="c1"></span>    <span class="n">basePackages</span> <span class="o">=</span> <span class="o">{</span><span class="s">&#34;com.xxx.springboot.first&#34;</span><span class="o">},</span>
+    <span class="c1">// 设置entityManager工厂
+</span><span class="c1"></span>    <span class="n">entityManagerFactoryRef</span> <span class="o">=</span> <span class="s">&#34;entityManagerFactoryFirst&#34;</span><span class="o">,</span>
+    <span class="c1">// 设置事务管理器
+</span><span class="c1"></span>    <span class="n">transactionManagerRef</span> <span class="o">=</span> <span class="s">&#34;transactionManagerFirst&#34;</span><span class="o">)</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FirstDataSourceConfiguration</span><span class="o">{</span>
+    <span class="cm">/**
+</span><span class="cm">    * 数据源一
+</span><span class="cm">    */</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">DataSource</span> <span class="n">firstDataSource</span><span class="o">;</span>
+  
+    <span class="cm">/**
+</span><span class="cm">    * 构造方式注入依赖
+</span><span class="cm">    */</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="nf">FirstDataSourceConfiguration</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&#34;firstDataSource&#34;</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">firstDataSource</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">firstDataSource</span> <span class="o">=</span> <span class="n">firstDataSource</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="cm">/**
+</span><span class="cm">    * 配置 entityManager 工厂
+</span><span class="cm">    */</span>
+    <span class="nd">@Primary</span>
+    <span class="nd">@Bean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;entityManagerFactoryFirst&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">LocalContainerEntityManagerFactoryBean</span> <span class="nf">entityManagerFactoryFirst</span><span class="o">(</span><span class="n">EntityManagerFactoryBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">builder</span>
+        <span class="c1">// 设置数据源
+</span><span class="c1"></span>        <span class="o">.</span><span class="na">dataSource</span><span class="o">(</span><span class="n">firstDataSource</span><span class="o">)</span>
+        <span class="c1">// 设置 entity 的包路径
+</span><span class="c1"></span>        <span class="o">.</span><span class="na">packages</span><span class="o">(</span><span class="s">&#34;com.xxx.springboot.first&#34;</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+  
+    <span class="cm">/**
+</span><span class="cm">    * 配置事务管理器
+</span><span class="cm">    */</span>
+    <span class="nd">@Primary</span>
+    <span class="nd">@Bean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;transactionManagerFirst&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">PlatformTransactionManager</span> <span class="nf">transactionManagerFirst</span><span class="o">(</span><span class="n">EntityManagerFactoryBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 返回 jpa 事务管理器
+</span><span class="c1"></span>        <span class="k">return</span> <span class="k">new</span> <span class="n">JpaTransactionManager</span><span class="o">(</span><span class="n">entityManagerFactoryFirst</span><span class="o">(</span><span class="n">builder</span><span class="o">).</span><span class="na">getObject</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.springboot.first.UserOneRepository.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot.first</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.data.repository.CrudRepository</span><span class="o">;</span>
+  
+<span class="cm">/**
+</span><span class="cm">    * 继承 CrudRepository
+</span><span class="cm">    */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserOneRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&lt;</span><span class="n">UserOne</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="o">{</span>
+  
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.springboot.first.UserOneService.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot.first</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.transaction.annotation.Transactional</span><span class="o">;</span>
+  
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserOneService</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">UserOneRepository</span> <span class="n">userOneRepository</span><span class="o">;</span>
+  
+    <span class="nd">@Transactional</span><span class="o">(</span><span class="n">rollbackFor</span> <span class="o">=</span> <span class="n">Exception</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">UserOne</span> <span class="nf">save</span><span class="o">(</span><span class="n">UserOne</span> <span class="n">userOne</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 保存实体类
+</span><span class="c1"></span>        <span class="k">return</span> <span class="n">userOneRepository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">userOne</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="76-第二个数据源">7.6 第二个数据源</h3>
+<ul>
+<li>
+<p><strong>com.xxx.springboot.second.UserTwo.java</strong></p>
+<ul>
+<li>与 <strong>com.xxx.springboot.first.UserOne.java</strong> 一致</li>
+</ul>
+</li>
+<li>
+<p><strong>com.xxx.springboot.second.SecondDataSourceConfiguration.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot.second</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Qualifier</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Primary</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.jpa.repository.config.EnableJpaRepositories</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.orm.jpa.JpaTransactionManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.transaction.PlatformTransactionManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.transaction.annotation.EnableTransactionManagement</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">javax.persistence.EntityManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.sql.DataSource</span><span class="o">;</span>
+  
+<span class="nd">@Configuration</span>
+<span class="nd">@EnableTransactionManagement</span>
+<span class="nd">@EnableJpaRepositories</span><span class="o">(</span>
+    <span class="c1">// 设置 Repository 所在位置
+</span><span class="c1"></span>    <span class="n">basePackages</span> <span class="o">=</span> <span class="o">{</span><span class="s">&#34;com.xxx.springboot.second&#34;</span><span class="o">},</span>
+    <span class="c1">// 设置 entityManager 工厂
+</span><span class="c1"></span>    <span class="n">entityManagerFactoryRef</span> <span class="o">=</span> <span class="s">&#34;entityManagerFactorySecond&#34;</span><span class="o">,</span>
+    <span class="c1">// 设置事务管理器
+</span><span class="c1"></span>    <span class="n">transactionManagerRef</span> <span class="o">=</span> <span class="s">&#34;transactionManagerSecond&#34;</span><span class="o">)</span>
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SecondDataSourceConfiguration</span> <span class="o">{</span>
+    <span class="cm">/**
+</span><span class="cm">    * 数据源二
+</span><span class="cm">    */</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">DataSource</span> <span class="n">secondDataSource</span><span class="o">;</span>
+  
+    <span class="cm">/**
+</span><span class="cm">    * 构造方式注入依赖
+</span><span class="cm">    */</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="nf">SecondDataSourceConfiguration</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&#34;secondDataSource&#34;</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">secondDataSource</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">secondDataSource</span> <span class="o">=</span> <span class="n">secondDataSource</span><span class="o">;</span>
+    <span class="o">}</span>
+  
+    <span class="cm">/**
+</span><span class="cm">    * 配置 entityManager 工厂
+</span><span class="cm">    */</span>
+    <span class="nd">@Bean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;entityManagerFactorySecond&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">LocalContainerEntityManagerFactoryBean</span> <span class="nf">entityManagerFactorySecond</span><span class="o">(</span><span class="n">EntityManagerFactoryBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">builder</span>
+        <span class="c1">// 设置数据源
+</span><span class="c1"></span>        <span class="o">.</span><span class="na">dataSource</span><span class="o">(</span><span class="n">secondDataSource</span><span class="o">)</span>
+        <span class="c1">// 设置 entity 的包路径
+</span><span class="c1"></span>        <span class="o">.</span><span class="na">packages</span><span class="o">(</span><span class="s">&#34;com.xxx.springboot.second&#34;</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+  
+    <span class="cm">/**
+</span><span class="cm">    * 配置事务管理器
+</span><span class="cm">    */</span>
+    <span class="nd">@Bean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;transactionManagerSecond&#34;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">PlatformTransactionManager</span> <span class="nf">transactionManagerSecond</span><span class="o">(</span><span class="n">EntityManagerFactoryBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">JpaTransactionManager</span><span class="o">(</span><span class="n">entityManagerFactorySecond</span><span class="o">(</span><span class="n">builder</span><span class="o">).</span><span class="na">getObject</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.springboot.second.UserTwoRepository.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot.second</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.data.repository.CrudRepository</span><span class="o">;</span>
+  
+<span class="cm">/**
+</span><span class="cm">    * 继承CrudRepository
+</span><span class="cm">    */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserTwoRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&lt;</span><span class="n">UserTwo</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="o">{</span>
+  
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>com.xxx.springboot.second.UserTwoService.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot.second</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.transaction.annotation.Transactional</span><span class="o">;</span>
+  
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserTwoService</span> <span class="o">{</span>
+  
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">UserTwoRepository</span> <span class="n">userTwoRepository</span><span class="o">;</span>
+  
+    <span class="nd">@Transactional</span><span class="o">(</span><span class="n">rollbackFor</span> <span class="o">=</span> <span class="n">Exception</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">UserTwo</span> <span class="nf">save</span><span class="o">(</span><span class="n">UserTwo</span> <span class="n">userTwo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 保存实体类
+</span><span class="c1"></span>        <span class="k">return</span> <span class="n">userTwoRepository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">userTwo</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="77-配置文件">7.7 配置文件</h3>
+<ul>
+<li>
+<p><strong>application.properties</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 数据源 1
+app.datasource.first.url=jdbc:mysql://localhost:3306/test1
+app.datasource.first.username=root
+app.datasource.first.password=123
+app.datasource.first.driver-class-name=com.mysql.jdbc.Driver
+  
+# 数据源 2
+app.datasource.second.url=jdbc:mysql://localhost:3306/test2
+app.datasource.second.username=root
+app.datasource.second.password=123
+app.datasource.second.driver-class-name=com.mysql.jdbc.Driver
+  
+# 打印 sql 语句
+spring.jpa.show-sql=true
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="78-主程序">7.8 主程序</h3>
+<ul>
+<li>
+<p><strong>com.xxx.springboot.SpringbootApplication.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="o">;</span>
+  
+<span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringbootApplication</span><span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="n">SpringbootApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="79-测试程序">7.9 测试程序</h3>
+<ul>
+<li>
+<p><strong>com.xxx.springboot.DataSourceTest.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.xxx.springboot</span><span class="o">;</span>
+  
+<span class="kn">import</span> <span class="nn">com.xxx.springboot.first.UserOne</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.xxx.springboot.first.UserOneService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.xxx.springboot.second.UserTwo</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.xxx.springboot.second.UserTwoService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.ApplicationArguments</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.ApplicationRunner</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+  
+<span class="cm">/**
+</span><span class="cm">    * ApplicationRunner 接口可以让在 Spring Boot 启动后马上执行想要执行的方法
+</span><span class="cm">    */</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataSourceTest</span> <span class="kd">implements</span> <span class="n">ApplicationRunner</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="n">UserOneService</span> <span class="n">userOneService</span><span class="o">;</span>
+  
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="n">UserTwoService</span> <span class="n">userTwoService</span><span class="o">;</span>
+  
+    <span class="cm">/**
+</span><span class="cm">    * 该方法再 Spring Boot 启动完成后立即执行
+</span><span class="cm">    */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="n">ApplicationArguments</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 新建一个实体类
+</span><span class="c1"></span>        <span class="n">UserOne</span> <span class="n">userOne</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UserOne</span><span class="o">();</span>
+        <span class="n">userOne</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="s">&#34;xxx1&#34;</span><span class="o">);</span>
+        <span class="n">userOne</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="s">&#34;springboot1&#34;</span><span class="o">);</span>
+        <span class="c1">// 调用 Service
+</span><span class="c1"></span>        <span class="n">userOneService</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">userOne</span><span class="o">);</span>
+        <span class="n">UserTwo</span> <span class="n">userTwo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UserTwo</span><span class="o">();</span>
+        <span class="n">userTwo</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="s">&#34;xxx2&#34;</span><span class="o">);</span>
+        <span class="n">userTwo</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="s">&#34;springboot2&#34;</span><span class="o">);</span>
+        <span class="c1">//调用 Service
+</span><span class="c1"></span>        <span class="n">userTwoService</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">userTwo</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="710-运行测试">7.10 运行测试</h3>
+<ul>
+<li><code>mvn spring-boot:run</code></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-07-08</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/springboot/">SpringBoot</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/springboot6_aop/" class="prev" rel="prev" title="【SpringBoot】6_AOP"><i class="fas fa-angle-left fa-fw"></i>【SpringBoot】6_AOP</a>
+            <a href="/posts/springboot8_%E9%9B%86%E6%88%90mybatis/" class="next" rel="next" title="【SpringBoot】8_集成Mybatis">【SpringBoot】8_集成Mybatis<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> & <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
